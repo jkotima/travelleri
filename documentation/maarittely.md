@@ -7,13 +7,13 @@ ratkaisuja kolmella eri algoritmilla sekä toteuttaa näille suorituskykyvertail
 Kauppamatkustajan ongelmassa ratkaistaan usean eri solmun kautta kulkeva reitti niin,
 että kuljetaan jokaisen verkon solmun kautta. Yhtenä käytännön sovelluksena on 
 esimerkiksi jakeluauton reititys usean osoitteen kautta niin, että ajettu matka on
-mahdollisimman pieni. Kauppamatkustajan ongelma on tunnettu NP-ongelma, eli sen aikavaatimus on polynominen.
+mahdollisimman pieni. Kauppamatkustajan ongelma on tunnettu NP-ongelma.
 
 Työ liittyy tietojenkäsittelytieteiden kandiohjelmaan ja se toteutetaan Javalla. Dokumentaatiokieli on suomi.
 
 
 ### Sovellukseen on tarkoitus toteuttaa:
-* "Naivi algoritmi", jossa kokeillaan kaikki mahdolliset permutaatiot, joista lyhyin reitti valitaan
+* "Naivi" algoritmi, jossa kokeillaan kaikki mahdolliset permutaatiot, joista lyhyin reitti valitaan
 	* Tavoitteena aikavaativuusluokka **O(n!)**
 
 * Algoritmi, jossa hyödynnetään dynaamista ohjelmointia
@@ -25,7 +25,7 @@ Työ liittyy tietojenkäsittelytieteiden kandiohjelmaan ja se toteutetaan Javall
 Ohjelma saa syötteenä painotetun verkon. Verkon voi syöttää matriisina käsin tai lukea CSV-tiedostosta. Ohjelma palauttaa lyhimmän reitin solmujärjestyksen ja reitin kokonaispituuden.
 Reitti päättyy samaan solmuun kuin lähtösolmu (closed loop).
 
-Lisäksi, jos aikaa on riittävästi, työkalu verkkojen luomiseen katuosotteiden perusteella, käyttäen jotakin karttarajapintaa (esim. GraphHopper) osoitteiden välisten välimatkojen selvittämiseen.
+Lisäksi, jos aikaa on riittävästi, olisi tarkoitus toteuttaa ominaisuus verkkojen luomiseen katuosotteiden perusteella, käyttäen jotakin karttarajapintaa (esim. GraphHopper) osoitteiden välisten välimatkojen selvittämiseen.
 
 Lähteet:
 
