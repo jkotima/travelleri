@@ -1,5 +1,7 @@
 package travelleri.domain;
 
 public interface TSP {
-  void run();
+	void run();
+	int[] getShortestRoute();
+	double getShortestRouteLength();
 }
