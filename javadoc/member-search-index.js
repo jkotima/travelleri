@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"travelleri.domain","c":"NaiveTSP","l":"getShortestRoute()"},{"p":"travelleri.domain","c":"NaiveTSP","l":"getShortestRouteLength()"},{"p":"travelleri.domain","c":"NaiveTSP","l":"NaiveTSP(double[][])","url":"%3Cinit%3E(double[][])"},{"p":"travelleri.domain","c":"NaiveTSP","l":"run()"}]

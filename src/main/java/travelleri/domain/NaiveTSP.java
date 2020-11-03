@@ -1,32 +1,43 @@
 package travelleri.domain;
 
+/**
+ * Etsii lyhimmän polun syötetystä verkosta niin, että polku kulkee kaikkien
+ * verkon solmujen kautta palaten takaisin lähtösolmuun. Algoritmin naivi
+ * (hidas) toteutus.
+ */
 public class NaiveTSP implements TSP {
-	private double[][] graph;
-	private int n;
+	private double[][] graph; // verkko
+	private int n; // solmujen lukumäärä
+	private int[][] permutations; // kaikki mahdolliset polut
+	private boolean[] included; // makePermutations -metodin apumuuttuja
+	private int[] digits; // makePermutations -metodin apumuuttuja
+	private int[] shortestRoute; // laskettu verkon lyhyin polku
+	private double shortestRouteLength; // laskettu lyhyimmän polun pituus
+	private boolean ran; // onko algoritmi suoritettu
 
-	private int[][] permutations;
-	private boolean[] included;
-	private int[] digits;
-
-	private int[] shortestRoute;
-	private double shortestRouteLength;
-
-	private boolean ran;
-	
+	/**
+	 * Konstruktori.
+	 *
+	 * @param graph välimatkoista koostuva n*n matriisi, graph[x][y] on x:n ja y:n välinen
+	 *                      etäisyys liukulukuna
+	 */
 	public NaiveTSP(double[][] graph) {
 		this.graph = graph;
 		this.n = graph[0].length;
-
 		this.permutations = new int[0][0];
 		this.included = new boolean[graph[0].length];
 		this.digits = new int[graph[0].length];
-
 		this.shortestRoute = new int[graph[0].length + 1];
 		this.shortestRouteLength = Double.MAX_VALUE;
-		
 		this.ran = false;
 	}
 
+	/**
+	 * Rekursiivinen metodi, jolla alustetaan n mittaiset permutaatiot
+	 * oliomuuttujaan permutations. Apumetodi run() -metodille.
+	 * 
+	 * @param k rekursion aloituskohta taulukossa
+	 */
 	private void makePermutations(int k) {
 		if (k == n) {
 			int[][] newPermutations = new int[permutations.length + 1][n];
@@ -45,6 +56,9 @@ public class NaiveTSP implements TSP {
 		}
 	}
 
+	/**
+	 * Suorittaa algoritmin.
+	 */
 	@Override
 	public void run() {
 		makePermutations(1);
@@ -54,7 +68,7 @@ public class NaiveTSP implements TSP {
 			int[] route = new int[n + 1];
 			route[0] = 0;
 			int[] permutation = permutations[i];
-			
+
 			for (int j = 0; j < permutation.length - 1; j++) {
 				totalDistance += graph[permutation[j]][permutation[j + 1]];
 				route[j + 1] = permutation[j + 1];
@@ -66,18 +80,33 @@ public class NaiveTSP implements TSP {
 				shortestRoute = route;
 			}
 		}
-		
+
 		ran = true;
 	}
-	
+
+	/**
+	 * Palauttaa lyhimmän reitin solmujen listana. Suorittaa algoritmin, jos sitä ei
+	 * ole vielä suoritettu.
+	 * 
+	 * @return lyhyin reitti listana
+	 **/
 	@Override
 	public int[] getShortestRoute() {
-		if (!ran) run();
+		if (!ran)
+			run();
 		return shortestRoute;
 	}
+
+	/**
+	 * Palauttaa lyhimmän reitin kokonaispituuden liukulukuna. Suorittaa algoritmin,
+	 * jos sitä ei ole vielä suoritettu.
+	 * 
+	 * @return lyhyin reitti listana
+	 **/
 	@Override
 	public double getShortestRouteLength() {
-		if (!ran) run();
+		if (!ran)
+			run();
 		return shortestRouteLength;
 	}
 }
