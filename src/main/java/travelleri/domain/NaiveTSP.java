@@ -1,9 +1,10 @@
 package travelleri.domain;
 
 /**
- * Etsii lyhimmän polun syötetystä verkosta niin, että polku kulkee kaikkien
+ * Etsii lyhyimmän polun syötetystä verkosta niin, että polku kulkee kaikkien
  * verkon solmujen kautta palaten takaisin lähtösolmuun. Algoritmin naivi
- * (hidas) toteutus.
+ * (hidas) toteutus, jossa käydään kaikki reittivaihtoehdot (permutaatiot) läpi
+ * ja valitaan näistä lyhyin polku.
  */
 public class NaiveTSP implements TSP {
     private double[][] graph; // verkko
@@ -11,8 +12,8 @@ public class NaiveTSP implements TSP {
     private int[][] permutations; // kaikki mahdolliset polut
     private boolean[] included; // makePermutations -metodin apumuuttuja
     private int[] digits; // makePermutations -metodin apumuuttuja
-    private int[] shortestRoute; // laskettu verkon lyhyin polku
-    private double shortestRouteLength; // laskettu lyhyimmän polun pituus
+    private int[] shortestPath; // laskettu verkon lyhyin polku
+    private double shortestPathLength; // laskettu lyhyimmän polun pituus
     private boolean ran; // onko algoritmi suoritettu
 
     /**
@@ -22,18 +23,26 @@ public class NaiveTSP implements TSP {
      *              välinen etäisyys liukulukuna
      */
     public NaiveTSP(double[][] graph) {
-        this.graph = graph;
         this.nodesCount = graph[0].length;
+
+        // tarkastetaan, onko graph  n*n
+        for (double[] row : graph) {
+            if (row.length != this.nodesCount) {
+                throw new IllegalArgumentException("Invalid graph"); 
+            }
+        }
+
+        this.graph = graph;
         this.permutations = new int[0][0];
-        this.included = new boolean[graph[0].length];
-        this.digits = new int[graph[0].length];
-        this.shortestRoute = new int[graph[0].length + 1];
-        this.shortestRouteLength = Double.MAX_VALUE;
+        this.included = new boolean[this.nodesCount];
+        this.digits = new int[this.nodesCount];
+        this.shortestPath = new int[this.nodesCount + 1];
+        this.shortestPathLength = Double.MAX_VALUE;
         this.ran = false;
     }
 
     /**
-     * Rekursiivinen metodi, jolla alustetaan n mittaiset permutaatiot
+     * Rekursiivinen metodi, jolla alustetaan nodesCount mittaiset permutaatiot
      * oliomuuttujaan permutations. Apumetodi run() -metodille.
      * 
      * @param k rekursion aloituskohta taulukossa
@@ -65,19 +74,19 @@ public class NaiveTSP implements TSP {
 
         for (int i = 0; i < permutations.length; i++) {
             int totalDistance = 0;
-            int[] route = new int[nodesCount + 1];
-            route[0] = 0;
+            int[] path = new int[nodesCount + 1];
+            path[0] = 0;
             int[] permutation = permutations[i];
 
             for (int j = 0; j < permutation.length - 1; j++) {
                 totalDistance += graph[permutation[j]][permutation[j + 1]];
-                route[j + 1] = permutation[j + 1];
+                path[j + 1] = permutation[j + 1];
             }
             totalDistance += graph[permutation[permutation.length - 1]][0];
 
-            if (totalDistance < shortestRouteLength) {
-                shortestRouteLength = totalDistance;
-                shortestRoute = route;
+            if (totalDistance < shortestPathLength) {
+                shortestPathLength = totalDistance;
+                shortestPath = path;
             }
         }
 
@@ -88,27 +97,27 @@ public class NaiveTSP implements TSP {
      * Palauttaa lyhimmän reitin solmujen listana. Suorittaa algoritmin, jos sitä ei
      * ole vielä suoritettu.
      * 
-     * @return lyhyin reitti listana
+     * @return lyhyin polku listana
      **/
     @Override
-    public int[] getShortestRoute() {
+    public int[] getShortestPath() {
         if (!ran) {
             run();
         }
-        return shortestRoute;
+        return shortestPath;
     }
 
     /**
      * Palauttaa lyhimmän reitin kokonaispituuden liukulukuna. Suorittaa algoritmin,
      * jos sitä ei ole vielä suoritettu.
      * 
-     * @return lyhyin reitti listana
+     * @return lyhyin polku listana
      **/
     @Override
-    public double getShortestRouteLength() {
+    public double getShortestPathLength() {
         if (!ran) {
             run();
         }
-        return shortestRouteLength;
+        return shortestPathLength;
     }
 }
