@@ -1,4 +1,4 @@
-package travelleri;
+package mainclass;
 
 import java.util.Arrays;
 import travelleri.domain.NaiveTSP;
