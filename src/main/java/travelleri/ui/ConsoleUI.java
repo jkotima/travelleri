@@ -4,6 +4,9 @@ package travelleri.ui;
 import java.util.Scanner;
 import java.util.Arrays;
 
+import java.io.File;  // Import the File class
+import java.io.FileWriter;   // Import the FileWriter class
+import java.io.IOException;  // Import the IOException class to handle errors
 
 public class ConsoleUI {
     private String[] args;
@@ -28,6 +31,26 @@ public class ConsoleUI {
         }
     }
 
+    private void saveGraphToFile(String filename, double[][] graph) {
+        try {
+            File f = new File(filename);
+            FileWriter fw = new FileWriter(filename);
+            for (double[] row : graph) {
+                for (int i = 0; i < row.length; i++) {
+                    fw.write(Double.toString(row[i]));
+                    if (i < row.length-1) {
+                        fw.write(",");
+                    }
+                }
+                fw.write("\n");
+            }
+            fw.close();
+            System.out.println("Verkko tallennettu");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void createGraph() {
         System.out.print("Solmujen lukumäärä? ");
         while (!scan.hasNextInt()) scan.next();
@@ -45,7 +68,7 @@ public class ConsoleUI {
                     continue;
                 }
 
-                System.out.println("Kaaren "+(x+1)+"-"+(y+1)+" paino?");
+                System.out.print("Kaaren "+(x+1)+"-"+(y+1)+" paino? ");
                 while (!scan.hasNextDouble()) scan.next();
 
                 newGraph[x][y] = scan.nextDouble();
@@ -55,6 +78,10 @@ public class ConsoleUI {
         for (double[] line : newGraph) {
             System.out.println(Arrays.toString(line));
         }
-        
+        System.out.println();
+        System.out.print("Anna tiedostolle nimi: ");
+        scan.nextLine();
+        String filename = scan.nextLine();
+        saveGraphToFile(filename, newGraph);
     }
 }
