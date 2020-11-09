@@ -2,11 +2,13 @@ package travelleri.ui;
 
 // import travelleri.domain.NaiveTSP;
 import java.util.Scanner;
+
+import travelleri.io.FileIO;
+
 import java.util.Arrays;
 
-import java.io.File;  // Import the File class
-import java.io.FileWriter;   // Import the FileWriter class
-import java.io.IOException;  // Import the IOException class to handle errors
+import java.io.IOException; 
+import java.io.FileNotFoundException; 
 
 public class ConsoleUI {
     private String[] args;
@@ -17,41 +19,42 @@ public class ConsoleUI {
         this.scan = new Scanner(System.in);
     }
 
-    public void run() {
+    public void run() throws Exception {
         if (args.length == 0) {
-            System.out.println("Käyttö (komentoriviargumentit):");
-            System.out.println("create - uuden verkon luominen");
-            System.out.println("open * - verkon avaaminen tiedostosta *");
+            System.out.println("1. uuden verkon luominen");
+            System.out.println("2. verkon avaaminen tiedostosta");
 
+            while (!scan.hasNextInt()) scan.next();
+            int selection = scan.nextInt();
+
+            if (selection==1) {
+                scan.nextLine();
+                createGraph();
+            } else if (selection==2) {
+                scan.nextLine();
+                openGraph();
+            }
             return;
         }
 
         if (args[0].equals("create")) {
             createGraph();
         }
-    }
 
-    private void saveGraphToFile(String filename, double[][] graph) {
-        try {
-            File f = new File(filename);
-            FileWriter fw = new FileWriter(filename);
-            for (double[] row : graph) {
-                for (int i = 0; i < row.length; i++) {
-                    fw.write(Double.toString(row[i]));
-                    if (i < row.length-1) {
-                        fw.write(",");
-                    }
-                }
-                fw.write("\n");
-            }
-            fw.close();
-            System.out.println("Verkko tallennettu");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (args[0].equals("open")) {
+            openGraph();
         }
     }
 
-    private void createGraph() {
+    public void openGraph() throws FileNotFoundException {
+        System.out.print("Anna avattavan tiedoston nimi: ");
+        String filename = scan.nextLine();
+        double[][] graph = FileIO.openGraphFromFile(filename);
+        System.out.println(Arrays.deepToString(graph)); 
+    
+    }
+    
+    private void createGraph() throws IOException {
         System.out.print("Solmujen lukumäärä? ");
         while (!scan.hasNextInt()) scan.next();
         int nodesCount = scan.nextInt();
@@ -81,7 +84,11 @@ public class ConsoleUI {
         System.out.println();
         System.out.print("Anna tiedostolle nimi: ");
         scan.nextLine();
-        String filename = scan.nextLine();
-        saveGraphToFile(filename, newGraph);
+        String filename = "";
+        while (filename.equals("")) {
+            filename = scan.nextLine();
+        }
+        
+        FileIO.saveGraphToFile(filename, newGraph);
     }
 }
