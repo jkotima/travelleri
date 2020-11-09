@@ -1,6 +1,6 @@
 package travelleri.ui;
 
-// import travelleri.domain.NaiveTSP;
+import travelleri.domain.NaiveTSP;
 import java.util.Scanner;
 
 import travelleri.io.FileIO;
@@ -21,19 +21,20 @@ public class ConsoleUI {
 
     public void run() throws Exception {
         if (args.length == 0) {
-            System.out.println("1. uuden verkon luominen");
-            System.out.println("2. verkon avaaminen tiedostosta");
+            System.out.println("1. luo uusi verkko ja tallenna se tiedostoon");
+            System.out.println("2. avaa verkko tiedostosta");
 
             while (!scan.hasNextInt()) scan.next();
             int selection = scan.nextInt();
+            scan.nextLine();
 
-            if (selection==1) {
-                scan.nextLine();
-                createGraph();
-            } else if (selection==2) {
-                scan.nextLine();
-                openGraph();
+            switch (selection) {
+                case 1:
+                    createGraph();
+                case 2:
+                    openGraph();
             }
+
             return;
         }
 
@@ -46,12 +47,32 @@ public class ConsoleUI {
         }
     }
 
+    private void runNaive(double[][] graph) {
+        NaiveTSP naive = new NaiveTSP(graph);
+        
+        // TODO: suoritusajan mittaus
+        naive.run();
+        
+        System.out.println("Lyhin polku:");
+        System.out.println(Arrays.toString(naive.getShortestPath()));
+        System.out.println("Lyhimmän polun pituus:");
+        System.out.println(naive.getShortestPathLength());
+    }
+
     public void openGraph() throws FileNotFoundException {
         System.out.print("Anna avattavan tiedoston nimi: ");
         String filename = scan.nextLine();
         double[][] graph = FileIO.openGraphFromFile(filename);
-        System.out.println(Arrays.deepToString(graph)); 
-    
+
+        System.out.print("1. aja verkolle naivi algoritmi");
+        while (!scan.hasNextInt()) scan.next();
+        int selection = scan.nextInt();
+        scan.nextLine();
+
+        switch (selection) {
+            case 1:
+                runNaive(graph);
+        }
     }
     
     private void createGraph() throws IOException {

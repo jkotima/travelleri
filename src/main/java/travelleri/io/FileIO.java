@@ -28,6 +28,7 @@ public class FileIO {
             i++;
         }
         sc.close();
+        System.out.println("Verkko avattu");
 
         return graph;
     }
