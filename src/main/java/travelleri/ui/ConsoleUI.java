@@ -45,6 +45,14 @@ public class ConsoleUI {
         if (args[0].equals("open")) {
             openGraph();
         }
+
+        if (args[0].equals("runNaive")) {
+            if (args.length == 1) {
+                throw new FileNotFoundException();
+            }
+            double[][] graph = FileIO.openGraphFromFile(args[1]);
+            runNaive(graph);
+        }
     }
 
     private void runNaive(double[][] graph) {
