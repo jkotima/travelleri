@@ -1,4 +1,4 @@
-package mainclass;
+package travelleri;
 
 import travelleri.ui.ConsoleUI;
 

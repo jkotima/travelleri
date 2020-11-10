@@ -32,12 +32,12 @@ dependencies {
 }
 
 application {
-    mainClass = 'mainclass.Main'
+    mainClass = 'travelleri.Main'
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'mainclass.Main'
+        attributes 'Main-Class': 'travelleri.Main'
     }
 }
 
@@ -48,7 +48,8 @@ jacocoTestReport {
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: 'mainclass/**')
+            fileTree(dir: it, exclude: ['travelleri/Main.class', 'travelleri/ui/**', , 'travelleri/io/**'])
+
         }))
     }
 }
