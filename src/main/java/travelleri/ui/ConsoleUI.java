@@ -1,5 +1,6 @@
 package travelleri.ui;
 
+import travelleri.domain.DynamicTSP;
 import travelleri.domain.NaiveTSP;
 import java.util.Scanner;
 
@@ -53,6 +54,14 @@ public class ConsoleUI {
             double[][] graph = FileIO.openGraphFromFile(args[1]);
             runNaive(graph);
         }
+
+        if (args[0].equals("runDynamic")) {
+            if (args.length == 1) {
+                throw new FileNotFoundException();
+            }
+            double[][] graph = FileIO.openGraphFromFile(args[1]);
+            runDynamic(graph);
+        }
     }
 
     private void runNaive(double[][] graph) {
@@ -67,12 +76,26 @@ public class ConsoleUI {
         System.out.println(naive.getShortestPathLength());
     }
 
+    private void runDynamic(double[][] graph) {
+        DynamicTSP dynamic = new DynamicTSP(graph);
+        
+        // TODO: suoritusajan mittaus
+        dynamic.run();
+        
+        System.out.println("Lyhin polku:");
+        System.out.println(Arrays.toString(dynamic.getShortestPath()));
+        System.out.println("Lyhimmän polun pituus:");
+        System.out.println(dynamic.getShortestPathLength());
+    }
+
     public void openGraph() throws FileNotFoundException {
         System.out.print("Anna avattavan tiedoston nimi: ");
         String filename = scan.nextLine();
         double[][] graph = FileIO.openGraphFromFile(filename);
 
-        System.out.print("1. aja verkolle naivi algoritmi");
+        System.out.println("1. aja verkolle naivi algoritmi");
+        System.out.println("2. aja verkolle dynaaminen algoritmi");
+
         while (!scan.hasNextInt()) scan.next();
         int selection = scan.nextInt();
         scan.nextLine();
@@ -80,6 +103,11 @@ public class ConsoleUI {
         switch (selection) {
             case 1:
                 runNaive(graph);
+                return;
+            case 2:
+                runDynamic(graph);
+                return;
+
         }
     }
     
