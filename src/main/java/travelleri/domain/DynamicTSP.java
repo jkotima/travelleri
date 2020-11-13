@@ -11,23 +11,35 @@ public class DynamicTSP implements TSP {
     public DynamicTSP(double[][] graph)  {
         this.graph = graph;
         this.nodesCount = graph[0].length;
+
+        // tarkastetaan, onko graph  n*n
+        for (double[] row : graph) {
+            if (row.length != this.nodesCount) {
+                throw new IllegalArgumentException("Invalid graph"); 
+            }
+        }
+        
         this.shortestPathLength = Double.MAX_VALUE;
         this.shortestPath = new int[this.nodesCount + 1];
         this.ran = false;
     }
 
+    private int[] arrayAppend(int[] array, int value) {
+        int[] newArray = new int[array.length+1];
+        System.arraycopy(array, 0, newArray, 0, array.length);
+        newArray[newArray.length-1] = value;
+
+        return newArray;
+    }
+
     public double g(int start, int[] remaining, int[] currentPath, double currentTotalLength) {
         //System.out.println("g("+start+", "+Arrays.toString(remaining)+")");
         
-        // updateCurrentPath
-        int[] newCurrentPath = new int[currentPath.length+1];
-        System.arraycopy(currentPath, 0, newCurrentPath, 0, currentPath.length);
-        newCurrentPath[newCurrentPath.length-1]=start;
-
         if (remaining.length==0) {
             if (currentTotalLength+graph[start][0] < shortestPathLength) {
                 shortestPathLength = currentTotalLength+graph[start][0];
-                shortestPath = newCurrentPath.clone();
+                int[] newCurrentPath = arrayAppend(currentPath, start);
+                shortestPath = arrayAppend(newCurrentPath, 0);
             }
 
             //System.out.println(Arrays.toString(newCurrentPath)+"|||"+(currentTotalLength+graph[start][0]));
@@ -48,7 +60,7 @@ public class DynamicTSP implements TSP {
                 i++;
             }
 
-            double x = graph[start][k]+g(k, nextRemaining, newCurrentPath, currentTotalLength+graph[start][k]);
+            double x = graph[start][k]+g(k, nextRemaining, arrayAppend(currentPath, start), currentTotalLength+graph[start][k]);
 
             if (x < min) {
                 min = x;
