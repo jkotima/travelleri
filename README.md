@@ -7,4 +7,4 @@ Tietorakenteet ja algoritmit, harjoitustyö
 
 [Viikkoraportti 2](../master/documentation/viikkoraportti2.md)
 
-[Viikkoraportti 4](../master/documentation/viikkoraportti3.md)
+[Viikkoraportti 3](../master/documentation/viikkoraportti3.md)
