@@ -1,9 +1,10 @@
 package travelleri.io;
-import java.util.Scanner;
-import java.io.FileNotFoundException;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter; 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class FileIO {
     public static double[][] openGraphFromFile(String filename) throws FileNotFoundException {
@@ -39,7 +40,7 @@ public class FileIO {
         for (double[] row : graph) {
             for (int i = 0; i < row.length; i++) {
                 fw.write(Double.toString(row[i]));
-                if (i < row.length-1) {
+                if (i < row.length - 1) {
                     fw.write(",");
                 }
             }

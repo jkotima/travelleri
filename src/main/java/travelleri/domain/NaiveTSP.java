@@ -73,7 +73,7 @@ public class NaiveTSP implements TSP {
         makePermutations(1);
 
         for (int i = 0; i < permutations.length; i++) {
-            int totalDistance = 0;
+            double totalDistance = 0;
             int[] path = new int[nodesCount + 1];
             path[0] = 0;
             int[] permutation = permutations[i];
