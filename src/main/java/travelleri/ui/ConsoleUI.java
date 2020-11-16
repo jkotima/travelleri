@@ -73,9 +73,11 @@ public class ConsoleUI {
     private void runNaive(double[][] graph) {
         NaiveTSP naive = new NaiveTSP(graph);
 
-        // TODO: suoritusajan mittaus
+        long t = System.nanoTime();
         naive.run();
+        t = System.nanoTime() - t;
 
+        System.out.println("Suoritusaika: " + t + " ns");
         System.out.println("Lyhin polku:");
         System.out.println(Arrays.toString(naive.getShortestPath()));
         System.out.println("Lyhimmän polun pituus:");
@@ -85,9 +87,11 @@ public class ConsoleUI {
     private void runDynamic(double[][] graph) {
         DynamicTSP dynamic = new DynamicTSP(graph);
 
-        // TODO: suoritusajan mittaus
+        long t = System.nanoTime();
         dynamic.run();
+        t = System.nanoTime() - t;
 
+        System.out.println("Suoritusaika: " + t + " ns");
         System.out.println("Lyhin polku:");
         System.out.println(Arrays.toString(dynamic.getShortestPath()));
         System.out.println("Lyhimmän polun pituus:");

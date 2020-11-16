@@ -120,7 +120,7 @@ public class DynamicTSP implements TSP {
      * ole vielä suoritettu.
      * 
      * @return lyhyin polku listana
-     **/
+     */
     @Override
     public int[] getShortestPath() {
         if (!ran) {
@@ -133,8 +133,8 @@ public class DynamicTSP implements TSP {
      * Palauttaa lyhimmän reitin kokonaispituuden liukulukuna. Suorittaa algoritmin,
      * jos sitä ei ole vielä suoritettu.
      * 
-     * @return lyhyin polku listana
-     **/
+     * @return lyhyimmän polun pituus
+     */
     @Override
     public double getShortestPathLength() {
         if (!ran) {
