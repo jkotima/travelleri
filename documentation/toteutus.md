@@ -6,17 +6,15 @@ Algoritmin naivissa toteutuksessa generoidaan aluksi kaikki mahdolliset etenimis
 
 Kun n on solmujen lukuäärä, permutaatioden generointi vie aikaa O(n!) (permutaatioiden lukumäärä) ja reittien läpikäyminen O(n!*n). Aikavaativuus on siis luokkaa O(n!), joten algoritmi on todella hidas.
 
-Turhaa työtä ja muistin käyttöä lisää myös permutaatioiden tallentaminen aluksi muistiin. 
-
 ## DynamicTSP
 
-Dynaamisessa toteutuksessa hyödynnetää lyhimmän polun palauttavaa rekursiivista esitystä
+Dynaamisessa toteutuksessa hyödynnetään lyhimmän polun palauttavaa rekursiivista esitystä
 ```
 dtsp(start, {remaining}) = min(graph[start][k] + dtsp(k, {remaining}-{k})),
 jossa k ∈ {remaining}.
 ```
 
-Esimerkiksi, jos verkossa on solmut {0,1,2}, toimii rekursio seuraavalla tavalla palauttaen lyhimmän TSP-polun:
+Esimerkiksi, jos verkossa on solmut {0,1,2}, toimii rekursio seuraavalla tavalla palauttaen lyhimmän TSP-polun (vain kolmen solmun tapauksessa järjestyksellä ei kylläkään ole merkitystä lyhinpään polkuun):
 ```
 
 dtsp(0, {1,2}) = min( graph[0][1] + dtsp(1, {2}),
@@ -35,12 +33,22 @@ dtsp(1, {}) = 0
 ```
 Toteutetussa algoritmissa rekursiivisen metodin parametreina on lisäksi sen hetkinen polku ja polun pituus, jotka tallennetaan oliomuuttujiksi rekursion päätyttyä, mikäli löydetty polku on lyhin.
 
-Yhden dtsp-metodin laskeminen vie O(n). 
-Rekursio (O(n)) toistetaan {remaining} osajoukkojen verran, joka vie aikaa O(2<sup>n</sup>). Aikavaativuus on siis O(n²2<sup>n</sup>).
+Rekursio, jonka aikavaativuus on O(n), toistetaan {remaining} osajoukkojen verran (+ koska taulukointi ei vielä ainakaan käytössä, osajoukkoja lasketaan useampaan kertaan). Osajoukkojen läpikäynti vie aikaa O(2<sup>n</sup>). Yhden dtsp-metodin aikavaativuus on O(n). Kokonaisaikavaativuus on siis luokkaa O(n²2<sup>n</sup>).
 
-
-## I/O
 
 ## UI
 
+Sovelluksen käyttöliittymä on komentorivipohjainen. Kaikki ominaisuudet ovat ajettavissa valikon kautta ja joitakin ominaisuuksia komentoriviargumentteja hyödyntäen suoraan.
 
+Käyttöliittymään on toteutettu:
+* verkkojen avaaminen tiedostosta
+* verkkojen luominen ja tallenttaminen tiedostoon
+    * verkkojen luonti käsin
+    * satunnaisverkkojen automaattinen luominen
+* algoritmien suoritus
+    * algoritmien suoritusajan mittaus
+    * lyhimmän polun, polun pituuden ja suoritusajan tulostus
+
+## I/O
+
+UI:n tiedoston tallennus- ja avausominaisuutta varten on toteutettu yksinkertainen luokka, jolla voi tallentaa kaksiulotteisen liukulukutaulukon csv-tyyliseksi tiedostoksi ja avata csv-tiedoston kaksiulotteiseksi taulukoksi.
