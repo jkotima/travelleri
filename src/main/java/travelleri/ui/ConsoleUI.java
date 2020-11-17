@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+
+import travelleri.domain.ApproxTSP;
 import travelleri.domain.DynamicTSP;
 import travelleri.domain.NaiveTSP;
 import travelleri.io.FileIO;
@@ -68,6 +70,28 @@ public class ConsoleUI {
             double[][] graph = FileIO.openGraphFromFile(args[1]);
             runDynamic(graph);
         }
+
+        if (args[0].equals("runApprox")) {
+            if (args.length == 1) {
+                throw new FileNotFoundException();
+            }
+            double[][] graph = FileIO.openGraphFromFile(args[1]);
+            runApprox(graph);
+        }
+    }
+
+    private void runApprox(double[][] graph) {
+        ApproxTSP approx = new ApproxTSP(graph);
+
+        long t = System.nanoTime();
+        approx.run();
+        t = System.nanoTime() - t;
+
+        System.out.println("Suoritusaika: " + t + " ns");
+        System.out.println("Lyhin polku:");
+        System.out.println(Arrays.toString(approx.getShortestPath()));
+        System.out.println("Lyhimmän polun pituus:");
+        System.out.println(approx.getShortestPathLength());
     }
 
     private void runNaive(double[][] graph) {
@@ -105,6 +129,7 @@ public class ConsoleUI {
 
         System.out.println("1. aja verkolle naivi algoritmi");
         System.out.println("2. aja verkolle dynaaminen algoritmi");
+        System.out.println("3. aja verkolle aproksoiva algoritmi");
 
         while (!scan.hasNextInt())  {
             scan.next();
@@ -118,6 +143,9 @@ public class ConsoleUI {
                 break;
             case 2:
                 runDynamic(graph);
+                break;
+            case 3:
+                runApprox(graph);
                 break;
             default:
                 return;

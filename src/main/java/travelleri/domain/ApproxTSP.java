@@ -1,7 +1,5 @@
 package travelleri.domain;
 
-import java.util.Arrays;
-
 public class ApproxTSP implements TSP {
     private int nodesCount;
     private double[][] graph;
@@ -25,7 +23,6 @@ public class ApproxTSP implements TSP {
     }
 
     private void primMST(int currentNode, int[] currentPath, double currentPathLength) {
-        //System.out.println(currentNode);
         included[currentNode] = true;
 
         double minWeight = Double.MAX_VALUE;
@@ -44,9 +41,6 @@ public class ApproxTSP implements TSP {
         }
 
         if (closestNeighbor == -1) {
-            //System.out.println(Arrays.toString(arrayAppend(arrayAppend(currentPath, currentNode),0)));
-            //System.out.println(currentPathLength+graph[currentNode][0]);
-
             shortestPath = arrayAppend(arrayAppend(currentPath, currentNode),0);
             shortestPathLength = currentPathLength+graph[currentNode][0];
 
@@ -59,7 +53,7 @@ public class ApproxTSP implements TSP {
     @Override
     public void run() {
         primMST(0, new int[0], 0);
-
+        ran = true;
     }
 
     /**
