@@ -33,7 +33,7 @@ dtsp(1, {}) = 0
 ```
 Toteutetussa algoritmissa rekursiivisen metodin parametreina on lisäksi sen hetkinen polku ja polun pituus, jotka tallennetaan oliomuuttujiksi rekursion päätyttyä, mikäli löydetty polku on lyhin.
 
-Rekursio, jonka aikavaativuus on O(n), toistetaan {remaining} osajoukkojen verran (+ koska taulukointi ei vielä ainakaan käytössä, osajoukkoja lasketaan useampaan kertaan). Osajoukkojen läpikäynti vie aikaa O(2<sup>n</sup>). Yhden dtsp-metodin aikavaativuus on O(n). Kokonaisaikavaativuus on siis luokkaa O(n²2<sup>n</sup>).
+Rekursio, jonka aikavaativuus on O(n), toistetaan {remaining} osajoukkojen verran (+ koska taulukointi ei vielä ainakaan käytössä, samoja osajoukkoja lasketaan useampaan kertaan). Osajoukkojen läpikäynti vie aikaa O(2<sup>n</sup>). Yhden dtsp-metodin aikavaativuus on O(n). Kokonaisaikavaativuus on siis luokkaa O(n²2<sup>n</sup>).
 
 
 ## UI
