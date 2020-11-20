@@ -1,9 +1,10 @@
 package travelleri.domain;
 
 /**
- * Pyrkii etsimään lyhyen polun syötetystä verkosta niin, että polku kulkee kaikkien
- * verkon solmujen kautta palaten takaisin lähtösolmuun. Algoritmin approksimoiva
- * toteutus (ei palauta optimaalista tulosta, mutta on suorituskykyinen).
+ * Pyrkii etsimään lyhyen polun syötetystä verkosta niin, että polku kulkee
+ * kaikkien verkon solmujen kautta palaten takaisin lähtösolmuun. Algoritmin
+ * approksimoiva toteutus (ei palauta optimaalista tulosta, mutta on
+ * suorituskykyinen).
  */
 public class ApproxTSP implements TSP {
     private double[][] graph; // solmujen määrä
@@ -46,9 +47,10 @@ public class ApproxTSP implements TSP {
 
         return newArray;
     }
+
     /**
-     * Toteuttaa Primin algoritmin mukaisen verkon läpikäynnin,
-     * jossa valitaan aina solmun lähimpänä oleva naapuri ja edetään sinne
+     * Toteuttaa Primin algoritmin mukaisen verkon läpikäynnin, jossa valitaan aina
+     * solmun lähimpänä oleva naapuri ja edetään sinne
      * 
      * currentPath ja currentPathLength ovat "lisänä" ns. lyhimmän polun solmujen
      * kirjanpitoa varten. Tallentaa lopputuloksen oliomuuttujiin shortestPath ja
@@ -77,12 +79,13 @@ public class ApproxTSP implements TSP {
         }
 
         if (closestNeighbor == -1) {
-            shortestPath = arrayAppend(arrayAppend(currentPath, currentNode),0);
-            shortestPathLength = currentPathLength+graph[currentNode][0];
+            shortestPath = arrayAppend(arrayAppend(currentPath, currentNode), 0);
+            shortestPathLength = currentPathLength + graph[currentNode][0];
 
             return;
         }
-        primMST(closestNeighbor, arrayAppend(currentPath, currentNode), currentPathLength+minWeight);
+        primMST(closestNeighbor, arrayAppend(currentPath, currentNode),
+                currentPathLength + minWeight);
     }
 
     /**

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
-
 import travelleri.domain.ApproxTSP;
 import travelleri.domain.DynamicTSP;
 import travelleri.domain.NaiveTSP;
