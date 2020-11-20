@@ -33,7 +33,14 @@ dtsp(1, {}) = 0
 ```
 Toteutetussa algoritmissa rekursiivisen metodin parametreina on lisäksi sen hetkinen polku ja polun pituus, jotka tallennetaan oliomuuttujiksi rekursion päätyttyä, mikäli löydetty polku on lyhin.
 
-Rekursio, jonka aikavaativuus on O(n), toistetaan {remaining} osajoukkojen verran (+ koska taulukointi ei vielä ainakaan käytössä, samoja osajoukkoja lasketaan useampaan kertaan). Osajoukkojen läpikäynti vie aikaa O(2<sup>n</sup>). Yhden dtsp-metodin aikavaativuus on O(n). Kokonaisaikavaativuus on siis luokkaa O(n²2<sup>n</sup>).
+Rekursio, jonka aikavaativuus on O(n), toistetaan {remaining} osajoukkojen verran (nyt tosin, koska taulukointi ei vielä ainakaan käytössä, samoja osajoukkoja lasketaan useampaan kertaan). Osajoukkojen läpikäynti vie aikaa O(2<sup>n</sup>). Yhden dtsp-metodin aikavaativuus on O(n). Kokonaisaikavaativuus taulukoinnin kanssa olisi luokkaa O(n²2<sup>n</sup>), nyt jonkin verran enemmän.
+
+## ApproxTSP
+
+Approksimaatioalgoritmi perustuu [Primin algoritmin](https://en.wikipedia.org/wiki/Prim%27s_algorithm) tapaiseen verkon läpikäyntiin, jossa edetään verkossa aina käsiteltävän solmun lähimpään naapurisolmuun. Kun kaikki solmut on käyty läpi, tallennetaan kerääntynyt reitti ja matka oliomuuttujiin.
+
+Polku ei siis missään nimessa kaikissa tapauksissa ole optimipolku, mutta algoritmi on nopea: jos n on solmujen lukumäärä, aikavaativuus on vain O(n²) (käytössä solmut läpi käyvä rekursio, jonka sisällä yksi solmut läpi käyvä silmukka).
+
 
 
 ## UI
