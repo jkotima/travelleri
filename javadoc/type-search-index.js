@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"travelleri.ui","l":"ConsoleUI"},{"p":"travelleri.domain","l":"DynamicTSP"},{"p":"travelleri.io","l":"FileIO"},{"p":"travelleri","l":"Main"},{"p":"travelleri.domain","l":"NaiveTSP"},{"p":"travelleri.domain","l":"TSP"}]
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"travelleri.domain","l":"DynamicTSP"},{"p":"travelleri.domain","l":"NaiveTSP"},{"p":"travelleri.domain","l":"TSP"}]

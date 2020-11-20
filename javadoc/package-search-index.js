@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"travelleri.io"},{"l":"travelleri.ui"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"travelleri.domain"}]
