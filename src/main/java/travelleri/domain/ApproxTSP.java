@@ -23,6 +23,13 @@ public class ApproxTSP implements TSP {
         this.graph = graph;
         this.nodesCount = graph.length;
         this.visited = new boolean[graph.length];
+
+        // tarkastetaan, onko graph n*n
+        for (double[] row : graph) {
+            if (row.length != this.nodesCount) {
+                throw new IllegalArgumentException("Invalid graph");
+            }
+        }
     }
 
     /**
