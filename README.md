@@ -15,3 +15,4 @@ Tietorakenteet ja algoritmit, harjoitustyö
 
 [Viikkoraportti 4](../master/documentation/viikkoraportti4.md)
 
+[Viikkoraportti 5](../master/documentation/viikkoraportti5.md)
