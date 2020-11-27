@@ -8,6 +8,8 @@ import java.util.Scanner;
 import travelleri.domain.ApproxTSP;
 import travelleri.domain.DynamicTSP;
 import travelleri.domain.NaiveTSP;
+import travelleri.domain.BranchTSP;
+
 import travelleri.io.FileIO;
 
 
@@ -77,6 +79,14 @@ public class ConsoleUI {
             double[][] graph = FileIO.openGraphFromFile(args[1]);
             runApprox(graph);
         }
+
+        if (args[0].equals("runBranch")) {
+            if (args.length == 1) {
+                throw new FileNotFoundException();
+            }
+            double[][] graph = FileIO.openGraphFromFile(args[1]);
+            runBranch(graph);
+        }
     }
 
     private void runApprox(double[][] graph) {
@@ -121,6 +131,20 @@ public class ConsoleUI {
         System.out.println(dynamic.getShortestPathLength());
     }
 
+    private void runBranch(double[][] graph) {
+        BranchTSP branch = new BranchTSP(graph);
+
+        long t = System.nanoTime();
+        branch.run();
+        t = System.nanoTime() - t;
+
+        System.out.println("Suoritusaika: " + t + " ns");
+        System.out.println("Lyhin polku:");
+        System.out.println(Arrays.toString(branch.getShortestPath()));
+        System.out.println("Lyhimmän polun pituus:");
+        System.out.println(branch.getShortestPathLength());
+    }
+
     public void openGraph() throws FileNotFoundException {
         System.out.print("Anna avattavan tiedoston nimi: ");
         String filename = scan.nextLine();
@@ -129,6 +153,8 @@ public class ConsoleUI {
         System.out.println("1. aja verkolle naivi algoritmi");
         System.out.println("2. aja verkolle dynaaminen algoritmi");
         System.out.println("3. aja verkolle aproksoiva algoritmi");
+        System.out.println("4. aja verkolle branch-and-bound algoritmi");
+
 
         while (!scan.hasNextInt())  {
             scan.next();
@@ -146,6 +172,9 @@ public class ConsoleUI {
             case 3:
                 runApprox(graph);
                 break;
+            case 4:
+                runBranch(graph);
+                break;
             default:
                 return;
 
@@ -159,7 +188,7 @@ public class ConsoleUI {
         } 
         int nodesCount = scan.nextInt();
 
-        System.out.print("1. Syötä painot käsin 2. Generoi satunnaiset painot ");
+        System.out.print("1. Syötä painot käsin 2. Generoi satunnaiset painot 3. Generoi säännöllinen ruudukko");
         while (!scan.hasNextInt()) {
             scan.next();
         }
@@ -192,6 +221,16 @@ public class ConsoleUI {
                         break;
                     case 2:
                         newGraph[x][y] = 100 * r.nextDouble();
+                        break;
+                    case 3:
+                        int leveys = (int) Math.sqrt(nodesCount);
+                        int x1 = x / leveys;
+                        int y1 = x - (x1 * leveys);
+                        int x2 = y / leveys;
+                        int y2 = y - (x2 * leveys);
+                        
+                        newGraph[x][y] = Math.abs(x1 - x2) + Math.abs(y1 - y2);
+                        
                         break;
                     default:
                         return;
