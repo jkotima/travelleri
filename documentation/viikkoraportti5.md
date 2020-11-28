@@ -11,12 +11,10 @@ Motivaationa olisi saada algoritmi toimimaan järkevässä ajassa vähintään 1
 
 Tällä viikolla siis saatu aikaan:
 
-* Pään hakkaamista seinään
 * BranchTSP aloitus (tähän siis tulossa taulukoituDynamic+branch-n-bound-haku)
     * taulukoinnin aloitus, oma luokka DtspMemo
 * UI toimimaan BranchTsp:llä ja ehkä turha ominaisuus säännöllisten verkkojen generoimiseen
 * Vertaisarvionti
-
 
 Ensi viikolla olisi siis tarkoitus:
 
@@ -25,3 +23,5 @@ Ensi viikolla olisi siis tarkoitus:
 * ominaisuus verkkojen tekemiseen katuosoitteiden avulla, aloitus/kartoitus
 * yleinen parantelu
 
+### Käytetyt tunnit
+n. 5+5+5+10=25h yhteensä
