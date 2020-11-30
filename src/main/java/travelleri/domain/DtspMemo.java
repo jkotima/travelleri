@@ -27,20 +27,20 @@ public class DtspMemo {
     private int collisions;
 
     public DtspMemo() {
-        this.results = new DtspResult[100000000];
+        this.results = new DtspResult[10000000];
         this.resultsIndex = 0;
-        this.HashToResultsIndex = new int[100000000];
+        this.HashToResultsIndex = new int[160000000];
         this.collisions = 0;
     }
 
-    // TODO: parempi hashfunktio
     private static int hashFor(int start, int[] remaining) {
-        int hash = 0;
+        int h = 1;
+        h = (h*7+start)%160000000;
         for (int r : remaining) {
-            hash += r;
+            h = (h*7+r)%160000000;
         }
-
-        return hash+start;
+        
+        return h;
     }
 
     private static boolean arrayEquals(int[] array1, int[] array2) {
@@ -114,6 +114,17 @@ public class DtspMemo {
 
     public int getCollisions() {
         return collisions;
+    }
+    public int getResultsIndex() {
+        return resultsIndex;
+    }
+
+    public void printHashValues() {
+        for (int i = 0; i < HashToResultsIndex.length; i++) {
+            if (HashToResultsIndex[i] != 0) {
+                System.out.println(i+ ", " + HashToResultsIndex[i]);
+            }
+        }
     }
     /*
     public void printResults() {
