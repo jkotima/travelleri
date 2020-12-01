@@ -1,16 +1,18 @@
 package travelleri.domain;
 
-import java.util.Arrays;
-
+/**
+ * Etsii lyhyimmän polun syötetystä verkosta niin, että polku kulkee kaikkien
+ * verkon solmujen kautta palaten takaisin lähtösolmuun. Algoritmin peruuttavan haun
+ * branch and bound -toteutus.
+ */
 public class BranchTSP implements TSP {
     private double[][] graph; // verkko
     private int nodesCount; // solmujen määrä
     private double shortestPathLength; // laskettu lyhyimmän polun pituus
     private int[] shortestPath; // laskettu verkon lyhyin polku
     private boolean ran; // onko algoritmi suoritettu
-    private boolean[] included;
-    private DtspMemo dtspResults;
-    private boolean foundPath;
+    private boolean[] included; // backtrack-metodin apumuuttuja, onko solmu mukana
+
     /**
      * Konstruktori.
      *
@@ -20,12 +22,10 @@ public class BranchTSP implements TSP {
     public BranchTSP(double[][] graph) {
         this.graph = graph;
         this.nodesCount = graph.length;
-        //this.shortestPathLength = 238.63300271532952D;
         this.shortestPathLength = Double.MAX_VALUE;
         this.included = new boolean[nodesCount];
         this.shortestPath = new int[graph.length+1];
-        this.dtspResults = new DtspMemo();
-        this.foundPath = false;
+
         // tarkastetaan, onko graph n*n
         for (double[] row : graph) {
             if (row.length != this.nodesCount) {
@@ -34,6 +34,13 @@ public class BranchTSP implements TSP {
         }
     }
 
+    /**
+     * Lisää arvon listan loppuun.
+     * 
+     * @param array lista, johon arvo lisätään
+     * @param value arvo, joka lisätään listaan
+     * @return uusi lista, johon arvo on lisätty
+     */
     private int[] arrayAppend(int[] array, int value) {
         int[] newArray = new int[array.length + 1];
         System.arraycopy(array, 0, newArray, 0, array.length);
@@ -42,51 +49,20 @@ public class BranchTSP implements TSP {
         return newArray;
     }
 
-    public double dtsp(int start, int[] remaining) {
-        if (remaining.length == 0) {
-            return graph[start][0];
-        }
-        
-        if (dtspResults.exists(start, remaining)) {
-            return dtspResults.get(start, remaining);
-        }
-        
-        double min = Double.MAX_VALUE;
-        for (int k : remaining) {
-
-            // filter k out from remaining
-            int[] nextRemaining = new int[remaining.length - 1];
-            int i = 0;
-            for (int r : remaining) {
-                if (r == k) {
-                    continue;
-                }
-                nextRemaining[i] = r;
-                i++;
-            }
-
-            double x = graph[start][k] + dtsp(k, nextRemaining);
-
-            if (x < min) {
-                min = x;
-            }
-        }
-
-        dtspResults.add(start, remaining, min);
-        return min;
-    }
-
+	/**
+     * Lisää arvon listan loppuun. Apumetodi primMST() -metodille.
+     * 
+     * @param node lista, johon arvo lisätään
+     * @param pathLength arvo, joka lisätään listaan
+	 * @param currentPath tämänhetkinen polku
+     */
     private void backtrack(int node, double pathLength, int[] currentPath) {
-        // todo: branch and bound ajamalla taulukuidista dynamicista(myöskin todo) oikean mittainen polku       
-        if (pathLength > shortestPathLength ||foundPath) {
+        if (pathLength > shortestPathLength) {
             return;
         }
         if (node == nodesCount) {
             double wholeLength = pathLength + graph[ currentPath[currentPath.length-1 ]][0];
             if (wholeLength <= shortestPathLength) {
-                if (wholeLength == shortestPathLength) {
-                    foundPath = true;
-                }
                 shortestPathLength = wholeLength;
                 shortestPath = arrayAppend(currentPath, 0);
             }
@@ -102,7 +78,6 @@ public class BranchTSP implements TSP {
         }
     }
 
-
     /**
      * Suorittaa algoritmin.
      */
@@ -112,12 +87,7 @@ public class BranchTSP implements TSP {
         for (int i = 1; i < nodesCount; i++) {
             remaining[i - 1] = i;
         }
-        shortestPathLength = dtsp(0, remaining);
-        System.out.println("reitin pituus löydetty");
         backtrack(1, 0, new int[1]);
-        System.out.println("Collisions: " + dtspResults.getCollisions());
-        System.out.println("Total dtsp-results: " + dtspResults.getResultsIndex());
-
         ran = true;
     }
 

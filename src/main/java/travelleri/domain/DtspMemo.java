@@ -1,38 +1,46 @@
-// kesken, tätä tulee käyttämään BranchTSP
-
 package travelleri.domain;
 
-import java.util.Arrays;
-
+/**
+ * Luokka tallentamaan DynamicTSP:n dtsp-metodin tuloksia.
+ */
 public class DtspMemo {
+    /**  Luokka dtsp-tulokselle */
     private class DtspResult {
         int start;
         int[] remaining;
         double result;
+        int predecessor;
+        int next; // törmäystilanteessa, seuraavan dtsp-tuloksen indeksi
 
-        int next;
-
-        DtspResult(int start, int[] remaining, double result) {
+        DtspResult(int start, int[] remaining, double result, int predecessor) {
             this.start = start;
             this.remaining = remaining;
             this.result = result;
+            this.predecessor = predecessor;
             this.next = -1;
         }
     }
 
-    private DtspResult[] results;
-    private int resultsIndex;
-    private int[] HashToResultsIndex;
+    private DtspResult[] results;       // tulokset
+    private int resultsIndex;           // tulosten indeksi, kasvaa, kun tulos lisätään
+    private int[] HashToResultsIndex;   // hash->results -taulukko
 
-    private int collisions;
+    private int collisions;             // törmäysten määrä (jos haluaa fiilata hash-funktiota tms)
 
     public DtspMemo() {
-        this.results = new DtspResult[10000000];
+        this.results = new DtspResult[160000000];
         this.resultsIndex = 0;
         this.HashToResultsIndex = new int[160000000];
         this.collisions = 0;
     }
 
+    /**
+     * Laskee hash-arvon start/remaining -parille.
+     *
+     * @param start dtsp:n start
+     * @param remaining dtsp:n remaining
+     * @return hash-arvo
+     */
     private static int hashFor(int start, int[] remaining) {
         int h = 1;
         h = (h*7+start)%160000000;
@@ -43,6 +51,13 @@ public class DtspMemo {
         return h;
     }
 
+    /**
+     * Vertaa kahden taulukon samuutta.
+     *
+     * @param array1 ensimmäinen taulukko
+     * @param array2 toinen taulukko
+     * @return onko taulukot samat
+     */
     private static boolean arrayEquals(int[] array1, int[] array2) {
         if (array1.length != array2.length) {
             return false;
@@ -55,6 +70,13 @@ public class DtspMemo {
         return true;
     }
 
+    /**
+     * Tarkastaa, onko tiettyä start/remaining -parin tulosta taulukoituna.
+     *
+     * @param start dtsp:n start
+     * @param remaining dtsp:n remaining
+     * @return onko tulos taulukoituna
+     */
     public boolean exists(int start, int[] remaining) {
         if (HashToResultsIndex[hashFor(start, remaining)] == 0) {
             return false;
@@ -74,9 +96,17 @@ public class DtspMemo {
         return false;        
     }
 
-    public void add(int start, int[] remaining, double result) {
+    /**
+     * Taulukoi dtsp-tuloksen.
+     *
+     * @param start dtsp:n start
+     * @param remaining dtsp:n remaining
+     * @param result dtsp:n tulos
+     * @param predecessor dtsp:n edeltäjäsolmu
+     */
+    public void add(int start, int[] remaining, double result, int predecessor) {
         resultsIndex++;
-        results[resultsIndex] = new DtspResult(start, remaining, result);
+        results[resultsIndex] = new DtspResult(start, remaining, result, predecessor);
 
         if (HashToResultsIndex[ hashFor(start, remaining) ] == 0) {
             HashToResultsIndex[ hashFor(start, remaining) ] = resultsIndex;
@@ -94,12 +124,19 @@ public class DtspMemo {
         }
     }
 
-    public double get(int start, int[] remaining) {
+    /**
+     * Etsii taulukosta dtsp:n start/remaining -paria vastaavan tulos-olion.
+     *
+     * @param start dtsp:n start
+     * @param remaining dtsp:n remaining
+     * @return dtsp-tulosolio
+     */
+    private DtspResult find(int start, int[] remaining) {
         DtspResult dr = results[ HashToResultsIndex[ hashFor(start, remaining) ] ];
 
         while(true) {
             if (start == dr.start && arrayEquals(remaining, dr.remaining)) {
-                return dr.result;
+                return dr;
             }
 
             if (dr.next == -1) {
@@ -109,35 +146,32 @@ public class DtspMemo {
             dr = results[dr.next];
         }
         
-        return dr.result;
+        return dr;
+    }
+
+    /**
+     * Etsii taulukosta dtsp:n start/remaining -paria vastaavan tuloksen.
+     *
+     * @param start dtsp:n start
+     * @param remaining dtsp:n remaining
+     * @return dtsp-tulos
+     */
+    public double findResult(int start, int[] remaining) {
+        return this.find(start, remaining).result;
+    }
+
+    /**
+     * Etsii taulukosta dtsp:n start/remaining -paria vastaavan edeltäjäsolmun.
+     *
+     * @param start dtsp:n start
+     * @param remaining dtsp:n remaining
+     * @return dtsp-edeltäjäsolmu
+     */
+    public int findPredecessor(int start, int[] remaining) {
+        return this.find(start, remaining).predecessor;
     }
 
     public int getCollisions() {
         return collisions;
     }
-    public int getResultsIndex() {
-        return resultsIndex;
-    }
-
-    public void printHashValues() {
-        for (int i = 0; i < HashToResultsIndex.length; i++) {
-            if (HashToResultsIndex[i] != 0) {
-                System.out.println(i+ ", " + HashToResultsIndex[i]);
-            }
-        }
-    }
-    /*
-    public void printResults() {
-        results[0] = new DtspResult(0, new int[0], new Dtsp(0, new int[0]));
-        int i = 0;
-        for (DtspResult c : results) {
-            if (c == null) break;
-            if (c.result.getMin() < 123123123 && arrayEquals(c.result.getPath(), new int[] {0, 6, 7, 8, 4, 1, 2, 5, 3, 0} )) {
-                System.out.println(i+". "+c.start + "," + Arrays.toString(c.remaining) + "=" + c.result.getMin() + Arrays.toString(c.result.getPath()) +  "   next:" + c.next);
-
-            }
-            i++;
-        }
-    }
-    */
 }

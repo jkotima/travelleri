@@ -11,6 +11,7 @@ public class DynamicTSP implements TSP {
     private double shortestPathLength; // laskettu lyhyimmän polun pituus
     private int[] shortestPath; // laskettu verkon lyhyin polku
     private boolean ran; // onko algoritmi suoritettu
+    private DtspMemo dtspResults; // dstp-funktion tulokset
 
     /**
      * Konstruktori.
@@ -20,7 +21,7 @@ public class DynamicTSP implements TSP {
      */
     public DynamicTSP(double[][] graph) {
         this.graph = graph;
-        this.nodesCount = graph[0].length;
+        this.nodesCount = graph.length;
 
         // tarkastetaan, onko graph n*n
         for (double[] row : graph) {
@@ -31,21 +32,27 @@ public class DynamicTSP implements TSP {
 
         this.shortestPathLength = Double.MAX_VALUE;
         this.shortestPath = new int[this.nodesCount + 1];
+        this.dtspResults = new DtspMemo();
         this.ran = false;
     }
 
     /**
-     * Lisää arvon listan loppuun. Apumetodi g() -metodille.
-     * 
-     * @param array lista, johon arvo lisätään
-     * @param value arvo, joka lisätään listaan
-     * @return uusi lista, johon arvo on lisätty
+     * Poistaa taulukosta yksittäisen halutun alkion.
+     *
+     * @param array taulukko
+     * @param toBeRemoved poistettava alkio
+     * @return taulukko ilman haluttua alkiota
      */
-    private int[] arrayAppend(int[] array, int value) {
-        int[] newArray = new int[array.length + 1];
-        System.arraycopy(array, 0, newArray, 0, array.length);
-        newArray[newArray.length - 1] = value;
-
+    private int[] removeFromArray(int[] array, int toBeRemoved) {
+        int[] newArray = new int[array.length - 1];
+        int i = 0;
+        for (int a : array) {
+            if (a == toBeRemoved) {
+                continue;
+            }
+            newArray[i] = a;
+            i++;
+        }
         return newArray;
     }
 
@@ -55,53 +62,62 @@ public class DynamicTSP implements TSP {
      * dtsp(start, {remaining}) = min(graph[start][k] + dtsp(k, {remaining}-{k})),
      * jossa k € {remaining}.
      * 
-     * currentPath ja currentPathLength ovat "lisänä" lyhimmän polun solmujen
-     * selvitystä varten. Tallentaa lopputuloksen oliomuuttujiin shortestPath ja
-     * shortestPathLength.
+     * Tulokset taulukoidaan ja haetaan dtspResults-oliosta.
      * 
      * @param start             aloitussolmu
      * @param remaining         jäljellä olevat solmut
-     * @param currentPath       tämänhetkinen polku
-     * @param currentPathLength tämänhetkinen polun pituus
+     * @return                  lyhyin matka
      */
-    public double dtsp(int start, int[] remaining, int[] currentPath, double currentPathLength) {
+    public double dtsp(int start, int[] remaining) {
         if (remaining.length == 0) {
-            if (currentPathLength + graph[start][0] < shortestPathLength) {
-                shortestPathLength = currentPathLength + graph[start][0];
-                int[] newCurrentPath = arrayAppend(currentPath, start);
-                shortestPath = arrayAppend(newCurrentPath, 0);
-            }
             return graph[start][0];
         }
 
         double min = Double.MAX_VALUE;
+        int predecessor = -1;
         for (int k : remaining) {
+            int[] nextRemaining = removeFromArray(remaining, k);
+            double nextDtsp;
 
-            // filter k out from remaining
-            int[] nextRemaining = new int[remaining.length - 1];
-            int i = 0;
-            for (int r : remaining) {
-                if (r == k) {
-                    continue;
-                }
-                nextRemaining[i] = r;
-                i++;
+            if (dtspResults.exists(k, nextRemaining)) {
+                nextDtsp = dtspResults.findResult(k, nextRemaining);
+            } else {
+                nextDtsp = dtsp(k, nextRemaining);
             }
 
-            double x = graph[start][k]
-                    + dtsp(k, nextRemaining, arrayAppend(currentPath, start), 
-                            currentPathLength + graph[start][k]);
+            double x = graph[start][k] + nextDtsp;
 
             if (x < min) {
                 min = x;
+                predecessor = k;
             }
         }
+
+        dtspResults.add(start, remaining, min, predecessor);
 
         return min;
     }
 
     /**
-     * Suorittaa algoritmin.
+     * Käy lyhyimmän polun läpi käyttäen hyväksi laskettujen dtsp-tuloksien
+     * edeltävien solmujen tietoja. Tallentaa lyhimmän polun shortestPath -muuttujaan.
+     * 
+     * @param remaining jäljellä olevat solmut (ajettaessa kaikki verkon solmut paitsi 0)
+     */
+    private void updateShortestPath(int[] remaining) {
+        int predecessor = dtspResults.findPredecessor(0, remaining);
+        shortestPath[shortestPath.length - 2] = predecessor;
+
+        for (int i = nodesCount; i > 2; i--) {
+            int[] nextRemaining = removeFromArray(remaining, predecessor);
+            predecessor = dtspResults.findPredecessor(predecessor, nextRemaining);
+            remaining = nextRemaining;
+            shortestPath[i - 2] = predecessor;
+        }
+    }
+
+    /**
+     * Suorittaa algoritmin. 
      */
     @Override
     public void run() {
@@ -110,7 +126,8 @@ public class DynamicTSP implements TSP {
             remaining[i - 1] = i;
         }
 
-        dtsp(0, remaining, new int[0], 0);
+        shortestPathLength = dtsp(0, remaining);
+        updateShortestPath(remaining);
 
         ran = true;
     }

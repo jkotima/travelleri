@@ -18,6 +18,7 @@ Tällä viikolla siis saatu aikaan:
 
 Ensi viikolla olisi siis tarkoitus:
 
+* BranchTSP
 * testaus verkoilla, jotka on jonkin muotoisia (approx-algoritmin vertailuja optimeihin tuloksiin, minkälaisissa verkoissa toimii hyvin, missä ei)
 * grafiikkaa testidokumenttiin (suorituskyky)
 * ominaisuus verkkojen tekemiseen katuosoitteiden avulla, aloitus/kartoitus
