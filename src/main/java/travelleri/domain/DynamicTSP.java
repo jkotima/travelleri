@@ -32,7 +32,7 @@ public class DynamicTSP implements TSP {
 
         this.shortestPathLength = Double.MAX_VALUE;
         this.shortestPath = new int[this.nodesCount + 1];
-        this.dtspResults = new DtspMemo();
+        this.dtspResults = new DtspMemo(graph.length);
         this.ran = false;
     }
 
