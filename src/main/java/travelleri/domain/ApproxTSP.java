@@ -13,7 +13,7 @@ public class ApproxTSP implements TSP {
     private double shortestPathLength; // laskettu lyhyimmän polun pituus
     private int[] shortestPath; // laskettu verkon lyhyin polku
     private boolean ran; // onko algoritmi suoritettu
-
+    private NodeList currentPath;
     /**
      * Konstruktori.
      *
@@ -24,28 +24,13 @@ public class ApproxTSP implements TSP {
         this.graph = graph;
         this.nodesCount = graph.length;
         this.visited = new boolean[graph.length];
-
+        this.currentPath = new NodeList(graph.length + 1);
         // tarkastetaan, onko graph n*n
         for (double[] row : graph) {
             if (row.length != this.nodesCount) {
                 throw new IllegalArgumentException("Invalid graph");
             }
         }
-    }
-
-    /**
-     * Lisää arvon listan loppuun. Apumetodi primMST() -metodille.
-     * 
-     * @param array lista, johon arvo lisätään
-     * @param value arvo, joka lisätään listaan
-     * @return uusi lista, johon arvo on lisätty
-     */
-    private int[] arrayAppend(int[] array, int value) {
-        int[] newArray = new int[array.length + 1];
-        System.arraycopy(array, 0, newArray, 0, array.length);
-        newArray[newArray.length - 1] = value;
-
-        return newArray;
     }
 
     /**
@@ -60,7 +45,8 @@ public class ApproxTSP implements TSP {
      * @param currentPath       tämänhetkinen polku
      * @param currentPathLength tämänhetkinen polun pituus
      */
-    private void primMST(int currentNode, int[] currentPath, double currentPathLength) {
+    private void primMST(int currentNode, double currentPathLength) {
+        currentPath.add(currentNode);
         visited[currentNode] = true;
 
         double minWeight = Double.MAX_VALUE;
@@ -79,13 +65,14 @@ public class ApproxTSP implements TSP {
         }
 
         if (closestNeighbor == -1) {
-            shortestPath = arrayAppend(arrayAppend(currentPath, currentNode), 0);
+            currentPath.add(0);
+            shortestPath = currentPath.getPath();
             shortestPathLength = currentPathLength + graph[currentNode][0];
 
             return;
         }
-        primMST(closestNeighbor, arrayAppend(currentPath, currentNode),
-                currentPathLength + minWeight);
+        
+        primMST(closestNeighbor, currentPathLength + minWeight);
     }
 
     /**
@@ -93,7 +80,7 @@ public class ApproxTSP implements TSP {
      */
     @Override
     public void run() {
-        primMST(0, new int[0], 0);
+        primMST(0, 0);
         ran = true;
     }
 
