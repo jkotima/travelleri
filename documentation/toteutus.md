@@ -31,17 +31,41 @@ dtsp(1, {}) = 0
 (graph[x][y] on etäisyys solmujen x ja y välillä)
 (min() palauttaa pienimmän arvon)
 ```
-Toteutetussa algoritmissa rekursiivisen metodin parametreina on lisäksi sen hetkinen polku ja polun pituus, jotka tallennetaan oliomuuttujiksi rekursion päätyttyä, mikäli löydetty polku on lyhin.
 
-Rekursio, jonka aikavaativuus on O(n), toistetaan {remaining} osajoukkojen verran (nyt tosin, koska taulukointi ei vielä ainakaan käytössä, samoja osajoukkoja lasketaan useampaan kertaan). Osajoukkojen läpikäynti vie aikaa O(2<sup>n</sup>). Yhden dtsp-metodin aikavaativuus on O(n). Kokonaisaikavaativuus taulukoinnin kanssa olisi luokkaa O(n²2<sup>n</sup>), nyt jonkin verran enemmän.
+Tulokset (ja edeltävät solmut) tallennetaan *DtspMemo*-luokan avulla muistiin, joten samoja laskutoimituksia ei tarvitse laskea useampaan kertaan. Käytännössä siis joka kerta, kun kutsutaan dtsp-metodia jollain parametrillä, tarkastetaan ensin, onko kyseisille parametreille saatu laskettua jo arvo. Jos on, palautetaan vastaus muistista.
+
+Kun rekursio on käyty läpi, käydään lasketut dtsp-tulokset läpi "takaperin" edeltävien solmujen mukaisesti (updateShortestPath), joka tallentaa lyhyimmän polun talteen.
+
+Rekursio, jonka aikavaativuus on O(n), toistetaan {remaining} osajoukkojen verran. Osajoukkojen läpikäynti vie aikaa O(2<sup>n</sup>). Yhden dtsp-metodin aikavaativuus on O(n). Kokonaisaikavaativuus pitäsi siis olla luokkaa O(n²2<sup>n</sup>).
+
+## DtspMemo
+
+Tämä tietorakenne on toteutettu DynamicTSP:n dtsp-metodin laskemien tulosten tallentamiseen ja niiden hakemiseen. Tulosten lisäksi jokaiseen start- ja remaining -pariin merkataan edeltävä solmu.
+
+Tallentaessa dtsp-tulosta start- ja remaining -parille lasketaan hash-arvo, jonka perusteella tulostaulukon indeksi on haettavissa nopeasti. Hash-taulukon ja tulostaulukon koko lasketaan konstruktoriargumentissa annetun solmumäärän perusteella.
+
+Törmäyksien hallinta on toteutettu ketjuttamalla, eli jokaisessa tulos-oliossa on osoitin (next) seuraavaan saman hash-arvon saaneeseen alkioon.
+
 
 ## ApproxTSP
 
-Approksimaatioalgoritmi perustuu [Primin algoritmin](https://en.wikipedia.org/wiki/Prim%27s_algorithm) tapaiseen verkon läpikäyntiin, jossa edetään verkossa aina käsiteltävän solmun lähimpään naapurisolmuun. Kun kaikki solmut on käyty läpi, tallennetaan kerääntynyt reitti ja matka oliomuuttujiin.
+Approksimaatioalgoritmi perustuu [Primin algoritmin](https://en.wikipedia.org/wiki/Prim%27s_algorithm) tapaiseen verkon läpikäyntiin.
 
-Polku ei siis missään nimessa kaikissa tapauksissa ole optimipolku, mutta algoritmi on nopea: jos n on solmujen lukumäärä, aikavaativuus on vain O(n²) (käytössä solmut läpi käyvä rekursio, jonka sisällä yksi solmut läpi käyvä silmukka).
+Solmuissa eteneminen on toteutettu rekursiivisesti. Rekursio etenee aina lähimpään vierailemattomaan solmuun pitämällä samalla kirjaa kokonaismatkasta. Kun kaikki solmut on käyty läpi, tallennetaan tulos talteen.
 
+Reitti tallennetaan muistiin käyttämällä apuna *NodeList*-tietorakennetta.
 
+Laskettu polku ei siis missään nimessa kaikissa tapauksissa ole optimipolku, mutta algoritmi on nopea: jos n on solmujen lukumäärä, aikavaativuus on vain O(n²) (käytössä solmut läpi käyvä rekursio, jonka sisällä yksi solmut läpi käyvä silmukka).
+
+## BranchTSP
+
+Algoritmi perustuu peruuttavaan hakuun ja sitä nopeuttavaan branch-and-bound -tekniikkan.
+
+Algoritmi käy järjestelmällisesti läpi kaikki yhdistelmät (O(n!)). Kuitenkin, jos sen hetkinsen läpikäytävän polun pituus on kasvanut yli lyhyimmän siihen mennessä löydetyn polun, lopetetaan kyseisen haaran läpikäynti. Tämä nopeuttaa laskentaa huomattavasti.
+
+## NodeList
+
+Yksinkertainen tietorakenne solmujulistojen tallentamiseen (käytössä ApproxTSP:ssä sekä BranchTSP:ssä). Tärkeimpänä metodit add (lisää solmun listan viimeiseksi) ja getLast(viimeisen solmun palautus). getPath palauttaa listan kokonaislukutaulukkona.
 
 ## UI
 
