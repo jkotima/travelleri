@@ -34,21 +34,6 @@ public class BranchTSP implements TSP {
         }
     }
 
-    /**
-     * Lisää arvon listan loppuun.
-     * 
-     * @param array lista, johon arvo lisätään
-     * @param value arvo, joka lisätään listaan
-     * @return uusi lista, johon arvo on lisätty
-     */
-    private int[] arrayAppend(int[] array, int value) {
-        int[] newArray = new int[array.length + 1];
-        System.arraycopy(array, 0, newArray, 0, array.length);
-        newArray[newArray.length - 1] = value;
-
-        return newArray;
-    }
-
 	/**
      * Lisää arvon listan loppuun. Apumetodi primMST() -metodille.
      * 
@@ -56,22 +41,27 @@ public class BranchTSP implements TSP {
      * @param pathLength arvo, joka lisätään listaan
 	 * @param currentPath tämänhetkinen polku
      */
-    private void backtrack(int node, double pathLength, int[] currentPath) {
+    private void backtrack(int node, double pathLength, NodeList currentPath) {
         if (pathLength > shortestPathLength) {
             return;
         }
         if (node == nodesCount) {
-            double wholeLength = pathLength + graph[ currentPath[currentPath.length-1 ]][0];
+            double wholeLength = pathLength + graph[currentPath.getLast()][0];
             if (wholeLength <= shortestPathLength) {
-                shortestPathLength = wholeLength;
-                shortestPath = arrayAppend(currentPath, 0);
+				shortestPathLength = wholeLength;
+                shortestPath = currentPath.getPath();
             }
         } else {
             for (int i = 1; i < nodesCount; i++) {
                 if (!included[i]) {
-                    included[i] = true;
-                    double distanceToNext = graph[currentPath[currentPath.length-1]][i];
-                    backtrack(node + 1, pathLength + distanceToNext, arrayAppend(currentPath, i));
+					included[i] = true;
+					
+					double distanceToNext = graph[currentPath.getLast()][i];
+					NodeList nextCurrentPath = new NodeList(currentPath);
+					nextCurrentPath.add(i);
+
+					backtrack(node + 1, pathLength + distanceToNext, nextCurrentPath);
+					
                     included[i] = false;
                 }
             }
@@ -86,8 +76,10 @@ public class BranchTSP implements TSP {
         int[] remaining = new int[nodesCount - 1];
         for (int i = 1; i < nodesCount; i++) {
             remaining[i - 1] = i;
-        }
-        backtrack(1, 0, new int[1]);
+		}
+		NodeList startti = new NodeList(nodesCount+1);
+		startti.add(0);
+        backtrack(1, 0, startti);
         ran = true;
     }
 
