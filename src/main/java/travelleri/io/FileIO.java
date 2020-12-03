@@ -29,7 +29,6 @@ public class FileIO {
             i++;
         }
         sc.close();
-        System.out.println("Verkko avattu");
 
         return graph;
     }
@@ -47,7 +46,6 @@ public class FileIO {
             fw.write("\n");
         }
         fw.close();
-        System.out.println("Verkko tallennettu");
 
     }
 }

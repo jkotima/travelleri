@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+
 import travelleri.domain.ApproxTSP;
 import travelleri.domain.DynamicTSP;
 import travelleri.domain.NaiveTSP;
+import travelleri.domain.TSP;
 import travelleri.domain.BranchTSP;
 
 import travelleri.io.FileIO;
@@ -26,6 +28,8 @@ public class ConsoleUI {
         if (args.length == 0) {
             System.out.println("1. luo uusi verkko ja tallenna se tiedostoon");
             System.out.println("2. avaa verkko tiedostosta");
+            System.out.println("3. aja suorituskykytesti kaikille algoritmeille");
+
 
             while (!scan.hasNextInt()) {
                 scan.next();
@@ -40,6 +44,13 @@ public class ConsoleUI {
                     break;
                 case 2:
                     openGraph();
+                    break;
+                case 3:
+                    runPerformanceTest("naive", 8);
+                    runPerformanceTest("branch", 12);
+                    runPerformanceTest("approx", 18);
+                    runPerformanceTest("dynamic", 18);
+
                     break;
                 default:
                     return;
@@ -61,6 +72,8 @@ public class ConsoleUI {
                 throw new FileNotFoundException();
             }
             double[][] graph = FileIO.openGraphFromFile(args[1]);
+            System.out.println("Verkko avattu");
+
             runNaive(graph);
         }
 
@@ -69,6 +82,8 @@ public class ConsoleUI {
                 throw new FileNotFoundException();
             }
             double[][] graph = FileIO.openGraphFromFile(args[1]);
+            System.out.println("Verkko avattu");
+
             runDynamic(graph);
         }
 
@@ -77,6 +92,8 @@ public class ConsoleUI {
                 throw new FileNotFoundException();
             }
             double[][] graph = FileIO.openGraphFromFile(args[1]);
+            System.out.println("Verkko avattu");
+
             runApprox(graph);
         }
 
@@ -85,7 +102,20 @@ public class ConsoleUI {
                 throw new FileNotFoundException();
             }
             double[][] graph = FileIO.openGraphFromFile(args[1]);
+            System.out.println("Verkko avattu");
+
             runBranch(graph);
+        }
+        if (args[0].equals("runPerformanceTest")) {
+            if (args[1].equals("all")) {
+                runPerformanceTest("naive", 8);
+                runPerformanceTest("branch", 12);
+                runPerformanceTest("approx", 18);
+                runPerformanceTest("dynamic", 18);
+                return;
+            }
+
+            runPerformanceTest(args[1], Integer.parseInt(args[2]));
         }
     }
 
@@ -145,15 +175,81 @@ public class ConsoleUI {
         System.out.println(branch.getShortestPathLength());
     }
 
+    private double[][] generateRandomGraph(int nodesCount) {
+        Random r = new Random();
+
+        double[][] randomGraph = new double[nodesCount][nodesCount];
+
+        for (int x = 0; x < nodesCount; x++) {
+            for (int y = 0; y < nodesCount; y++) {
+                if (x == y) {
+                    randomGraph[x][y] = 0;
+                    continue;
+                }
+                if (randomGraph[y][x] != 0) {
+                    randomGraph[x][y] = randomGraph[y][x];
+                    continue;
+                }
+
+                randomGraph[x][y] = 100 * r.nextDouble();
+                break;
+            }
+        }
+
+        return randomGraph;
+    }
+
+    private void runPerformanceTest(String algorithm, int maxNodesCount) {
+        System.out.println("**Testataan " + algorithm + " kymmenellä 2-" 
+                            + maxNodesCount +" solmuisella satunnaisverkolla**");
+
+        for (int nodesCount = 2; nodesCount <= maxNodesCount; nodesCount++) {
+            double[][] graph = generateRandomGraph(nodesCount);
+  
+            long t = System.nanoTime();
+            long tAcc = 0;
+            TSP tsp;
+
+            for (int i = 0; i < 10; i++) {
+                switch (algorithm) {
+                    case "naive":
+                        tsp = new NaiveTSP(graph);
+                        break;
+                    case "branch":
+                        tsp = new BranchTSP(graph);
+                        break;
+                    case "dynamic":
+                        tsp = new DynamicTSP(graph);
+                        break;
+                    case "approx":
+                        tsp = new ApproxTSP(graph);
+                        break;
+                    default:
+                        return;
+                }
+
+                t = System.nanoTime();
+                tsp.run();
+                t = System.nanoTime() - t;
+
+                tAcc += t;
+            }
+            System.out.println("Suoritusaika "+ nodesCount + " solmuisilla verkoilla keskimäärin: " 
+                                    + tAcc / 10 + " ns ("+ (double) (tAcc / 10)/1000000000 + "s)");
+        }
+    }
+    
+
     public void openGraph() throws FileNotFoundException {
         System.out.print("Anna avattavan tiedoston nimi: ");
         String filename = scan.nextLine();
         double[][] graph = FileIO.openGraphFromFile(filename);
-
+        System.out.println("Verkko avattu");
         System.out.println("1. aja verkolle naivi algoritmi");
         System.out.println("2. aja verkolle dynaaminen algoritmi");
         System.out.println("3. aja verkolle aproksoiva algoritmi");
         System.out.println("4. aja verkolle branch-and-bound algoritmi");
+
 
 
         while (!scan.hasNextInt())  {
@@ -254,4 +350,5 @@ public class ConsoleUI {
         
         FileIO.saveGraphToFile(filename, newGraph);
     }
+    
 }
