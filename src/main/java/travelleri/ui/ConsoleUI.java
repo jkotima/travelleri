@@ -45,13 +45,6 @@ public class ConsoleUI {
                 case 2:
                     openGraph();
                     break;
-                case 3:
-                    runPerformanceTest("naive", 8);
-                    runPerformanceTest("branch", 12);
-                    runPerformanceTest("approx", 18);
-                    runPerformanceTest("dynamic", 18);
-
-                    break;
                 default:
                     return;
             }
@@ -107,15 +100,8 @@ public class ConsoleUI {
             runBranch(graph);
         }
         if (args[0].equals("runPerformanceTest")) {
-            if (args[1].equals("all")) {
-                runPerformanceTest("naive", 8);
-                runPerformanceTest("branch", 12);
-                runPerformanceTest("approx", 18);
-                runPerformanceTest("dynamic", 18);
-                return;
-            }
-
-            runPerformanceTest(args[1], Integer.parseInt(args[2]));
+            runPerformanceTest(args[1], Integer.parseInt(args[2]), 
+                        Integer.parseInt(args[3]),Integer.parseInt(args[4]));
         }
     }
 
@@ -199,18 +185,18 @@ public class ConsoleUI {
         return randomGraph;
     }
 
-    private void runPerformanceTest(String algorithm, int maxNodesCount) {
-        System.out.println("**Testataan " + algorithm + " kymmenellä 2-" 
-                            + maxNodesCount +" solmuisella satunnaisverkolla**");
+    private void runPerformanceTest(String algorithm, int startNodesCount, int maxNodesCount, int repeats) {
+        System.out.println("**Testataan " + algorithm + " " + startNodesCount + "..."
+                            + maxNodesCount +" solmuisella satunnaisverkoilla ("+repeats+" testiä/verkkokoko)**");
 
-        for (int nodesCount = 2; nodesCount <= maxNodesCount; nodesCount++) {
+        for (int nodesCount = startNodesCount; nodesCount <= maxNodesCount; nodesCount++) {
             double[][] graph = generateRandomGraph(nodesCount);
   
             long t = System.nanoTime();
             long tAcc = 0;
             TSP tsp;
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < repeats; i++) {
                 switch (algorithm) {
                     case "naive":
                         tsp = new NaiveTSP(graph);
@@ -232,10 +218,12 @@ public class ConsoleUI {
                 tsp.run();
                 t = System.nanoTime() - t;
 
+                System.out.println((i+1)+". tulos: "+t);
                 tAcc += t;
             }
+            
             System.out.println("Suoritusaika "+ nodesCount + " solmuisilla verkoilla keskimäärin: " 
-                                    + tAcc / 10 + " ns ("+ (double) (tAcc / 10)/1000000000 + "s)");
+                                    + tAcc / repeats + " ns ("+ (double) (tAcc / repeats)/1000000000 + "s)");
         }
     }
     

@@ -27,12 +27,18 @@ public class DtspMemo {
 
     private int collisions;             // törmäysten määrä (säätämiseen)
     private int resultsSize;            // koko results-taulukolle
+    private int hashSize;               // hash-avaruuden koko
 
     public DtspMemo(int nodesCount) {
         this.resultsSize = (int) (Math.pow(2, nodesCount) * Math.sqrt(nodesCount) * 1.2);
         this.results = new DtspResult[resultsSize];
         this.resultsIndex = 0;
-        this.HashToResultsIndex = new int[resultsSize*5];
+        if (nodesCount > 14) {
+            hashSize = 306500000; // n. maksimikoko, jolla hash-funktio ei hajoa
+        } else {
+            hashSize = resultsSize * 5;
+        }
+        this.HashToResultsIndex = new int[hashSize];
         this.collisions = 0;
     }
     
@@ -45,9 +51,9 @@ public class DtspMemo {
      */
     private int hashFor(int start, int[] remaining) {
         int h = 1;
-        h = (h*7+start)%(resultsSize*5);
+        h = (h*7+start)%(hashSize);
         for (int r : remaining) {
-            h = (h*7+r)%(resultsSize*5);
+            h = (h*7+r)%(hashSize);
         }
         
         return h;
