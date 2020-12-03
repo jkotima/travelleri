@@ -1,31 +1,49 @@
 # Suorituskyky
 
+Kaikki testit suoritettiin koneella, jossa prosessorina i5-8265U @ 1.60Ghz x 4, muistia 16gb, käyttöjärjestelmänä Ubuntu.
+
 ## Testaus satunnaisesti generoiduilla verkoilla 
 
-Testaukset suoritettiin satunnaisesti UI:sta generoiduilla yksisuuntaisilla verkoilla. Kaarien paino on tällöin satunnainen liukuluku välillä 0-100. Testeissä käytetyt verkot löytyvä projektin hakemistosta /tests.
+Testaukset suoritettiin satunnaisesti generoiduilla yksisuuntaisilla verkoilla, joissa kaarien paino on satunnainen liukuluku välillä 0-100. 
+Verkkoja generoitiin kymmenen per solmumäärä, joiden suoritusajoista otettiin keskiarvo.
 
-Algoritmit voi suorittaa valitulle testiverkolle esim. komennoilla (linux):
-
+Valmiit testit kaikille algoritmeille voi ajaa komennolla
 ```
-./gradlew run --args "runNaive ./tests/5.csv" --console=plain
-
-./gradlew run --args "runDynamic ./tests/5.csv" --console=plain
+./gradlew run --args "runPerformanceTest all" --console=plain
 
 ```
 
-Testit toistettiin 5 kertaa samalla tietokoneella ja tuloksista otettiin keskiarvo.
+Yksittäisen testin voi myös ajaa. Esimerkiksi max 10 solmuisilla verkolla ajettava testi DynamicTSP:lle:
 
-| Solmujen lkm | NaiveTSP suoritusaika (ns) | DynamicTSP suoritusaika (ns) | ApproxTSP suoritusaika (ns) | ApproxTSP-polun pituus / optimipolun pituus |
+```
+./gradlew run --args "runPerformanceTest dynamic 10" --console=plain
+
+```
+### Tulokset
+
+| Solmujen lkm | NaiveTSP suoritusaika (ns) | BranchTSP suoritusaika | DynamicTSP suoritusaika (ns) | ApproxTSP suoritusaika (ns) |
 |---|---|---|---|---|
-| 2 | 10736 | 9610 | 4353 | 41/41  (100%)|
-| 3 | 14279 | 13925 | 4154 | 119/119 (100%) |
-| 4 | 19372 | 16916 | 4607 |  267/263 (102%) |
-| 5 | 89852 | 38133 | 6187  | 212/212 (100%) |
-| 6 | 561786 | 324764 | 5745  | 232/232 (100%) |
-| 7 | 20245724 | 787857 | 6653 |  245/197 (124%) |
-| 8 | 557931171 | 2019373 | 6366 | 230/194 (119%) |
-| 9 | 29097261622 | 16299561 | 8422 | 284/249 (114%) |
-| 10 |  | 85784533 | 8943 | 244/198 (123%) |
-| 11 |  | 348503966 | 9239 |  281/252 (112% )|
-| 12 |  | 2685138728 | 10153 |  207/165 (125%) |
+| 2 | 2559 | 24670 | 11228 | 1348
+| 3 | 2659 | 3607 | 8903 | 1347
+| 4 | 7950 | 10376 | 26083 | 1269
+| 5 | 44816 | 37653 | 61791  | 1798
+| 6 | 418571 | 75313 | 124675  | 2114
+| 7 | 11889404 | 284436 | 133470 | 3386
+| 8 | 426653851 | 1664075 | 319795 | 3129
+| 9 |  | 16299561 | 837232 | 3984
+| 10 |  | 85784533 | 1892480 | 4824
+| 11 |  | 348503966 | 4468774 | 4270
+| 12 |  | 2685138728 | 10923793 | 1376
 
+Huomataan, että DynamicTSP on huomattavasti nopein optimipolun tuottavista algoritmeista, mutta alle kuuden solmun verkoilla BranchTSP tai NaiveTSP ovat hieman nopeampia (eivät käytä niin raskasta tietorakennetta).
+
+Approx TSP:lle ei ole solmun määrällä niinkään merkitystä suoritusaikaan. Toisaalta se ei myöskään palauta optimipolkua.
+
+
+## ApproxTSP:n polun pituus vs. optimipolku
+
+### Satunnaisverkot
+| Solmujen lkm | ApproxTSP:n polun pituss % optimipolusta (keskimäärin) |
+|---|---|
+
+***kesken***
