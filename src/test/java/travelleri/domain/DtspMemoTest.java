@@ -2,8 +2,8 @@ package travelleri.domain;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 
 public class DtspMemoTest {
     DtspMemo dtspmemo;
@@ -27,12 +27,14 @@ public class DtspMemoTest {
 
     @Test
     public void findResultTest() {
-        assertEquals("Added result returned correctly", 123, dtspmemo.findResult(1, new int[] {2,3}), 1);
+        assertEquals("Added result returned correctly", 123, 
+                        dtspmemo.findResult(1, new int[] {2,3}), 1);
     }
 
     @Test
     public void findPredecessorTest() {
-        assertEquals("Predecessor returned correctly", 0, dtspmemo.findPredecessor(1, new int[] {2,3}), 1);
+        assertEquals("Predecessor returned correctly", 0, 
+                        dtspmemo.findPredecessor(1, new int[] {2,3}), 1);
     }
 
     @Test

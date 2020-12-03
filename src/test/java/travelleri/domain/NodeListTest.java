@@ -2,8 +2,8 @@ package travelleri.domain;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 
 public class NodeListTest {
     NodeList nl;
@@ -16,13 +16,12 @@ public class NodeListTest {
         nl.add(3);
         nl.add(4);
         nl.add(5);
-
     }
 
     @Test
     public void getPathTest() {
         assertArrayEquals("Returned path is correct", new int[] { 1,2,3,4,5 },
-        nl.getPath());
+                            nl.getPath());
     }
 
     @Test
@@ -34,7 +33,7 @@ public class NodeListTest {
     public void copyConstructorTest() {
         NodeList copy = new NodeList(nl);
         assertArrayEquals("Returned path is correct", new int[] { 1,2,3,4,5 },
-        copy.getPath());
+                        copy.getPath());
         assertEquals("Last node is correct", 5, copy.getLast());
     }
 }

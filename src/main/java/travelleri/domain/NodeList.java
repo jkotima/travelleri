@@ -1,4 +1,5 @@
 package travelleri.domain;
+
 /**
  * Tietorakenne polkujen tallentamiseen lisäämällä solmu taulukon loppuun (BranchTSP ja ApproxTSP)
  */

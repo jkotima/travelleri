@@ -5,15 +5,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
-
 import travelleri.domain.ApproxTSP;
+import travelleri.domain.BranchTSP;
 import travelleri.domain.DynamicTSP;
 import travelleri.domain.NaiveTSP;
 import travelleri.domain.TSP;
-import travelleri.domain.BranchTSP;
-
 import travelleri.io.FileIO;
-
 
 public class ConsoleUI {
     private String[] args;
@@ -185,16 +182,21 @@ public class ConsoleUI {
         return randomGraph;
     }
 
-    private void runPerformanceTest(String algorithm, int startNodesCount, int maxNodesCount, int repeats) {
-        System.out.println("**Testataan " + algorithm + " " + startNodesCount + "..."
-                            + maxNodesCount +" solmuisella satunnaisverkoilla ("+repeats+" testiä/verkkokoko)**");
+    private void runPerformanceTest(String algorithm, int startNodesCount,
+                                    int maxNodesCount, int repeats) {
 
-        for (int nodesCount = startNodesCount; nodesCount <= maxNodesCount; nodesCount++) {
+        System.out.println("**Testataan " + algorithm + " " + startNodesCount + "..."
+                            + maxNodesCount + " solmuisella satunnaisverkoilla ("
+                            + repeats + " testiä/verkkokoko)**");
+
+        for (int nodesCount = startNodesCount; nodesCount <= maxNodesCount; 
+                                nodesCount++) {
+
             double[][] graph = generateRandomGraph(nodesCount);
-  
+            
+            TSP tsp;
             long t = System.nanoTime();
             long tAcc = 0;
-            TSP tsp;
 
             for (int i = 0; i < repeats; i++) {
                 switch (algorithm) {
@@ -218,12 +220,14 @@ public class ConsoleUI {
                 tsp.run();
                 t = System.nanoTime() - t;
 
-                System.out.println((i+1)+". tulos: "+t);
+                System.out.println((i + 1) + ". tulos: " + t);
                 tAcc += t;
             }
             
-            System.out.println("Suoritusaika "+ nodesCount + " solmuisilla verkoilla keskimäärin: " 
-                                    + tAcc / repeats + " ns ("+ (double) (tAcc / repeats)/1000000000 + "s)");
+            System.out.println("Suoritusaika " + nodesCount 
+                                + " solmuisilla verkoilla keskimäärin: " 
+                                + tAcc / repeats + " ns (" 
+                                + (double) (tAcc / repeats) / 1000000000 + "s)");
         }
     }
     
@@ -272,14 +276,15 @@ public class ConsoleUI {
         } 
         int nodesCount = scan.nextInt();
 
-        System.out.print("1. Syötä painot käsin 2. Generoi satunnaiset painot 3. Generoi säännöllinen ruudukko");
+        System.out.print("1. Syötä painot käsin 2. Generoi satunnaiset painot"
+                        + "3. Generoi säännöllinen ruudukko");
+        
         while (!scan.hasNextInt()) {
             scan.next();
         }
         int selection = scan.nextInt();
 
         double[][] newGraph = new double[nodesCount][nodesCount];
-
 
         Random r = new Random();
 
@@ -338,5 +343,4 @@ public class ConsoleUI {
         
         FileIO.saveGraphToFile(filename, newGraph);
     }
-    
 }

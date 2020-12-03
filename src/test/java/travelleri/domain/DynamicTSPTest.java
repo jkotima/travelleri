@@ -34,8 +34,9 @@ public class DynamicTSPTest {
         DynamicTSP tsp = new DynamicTSP(graph);
 
         assertEquals("Shortest path length is 199.0", 199, tsp.getShortestPathLength(), 1);
-        assertArrayEquals("The shortest path is correct", new int[] {0, 9, 3, 6, 7, 5, 8, 4, 2, 1, 0}, 
-                tsp.getShortestPath());
+        assertArrayEquals("The shortest path is correct", 
+                            new int[] {0, 9, 3, 6, 7, 5, 8, 4, 2, 1, 0}, 
+                            tsp.getShortestPath());
     }
 
     @Test

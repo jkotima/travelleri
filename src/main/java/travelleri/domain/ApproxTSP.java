@@ -14,6 +14,7 @@ public class ApproxTSP implements TSP {
     private int[] shortestPath; // laskettu verkon lyhyin polku
     private boolean ran; // onko algoritmi suoritettu
     private NodeList currentPath;
+    
     /**
      * Konstruktori.
      *

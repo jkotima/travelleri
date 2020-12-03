@@ -23,7 +23,7 @@ public class DtspMemo {
 
     private DtspResult[] results;       // tulokset
     private int resultsIndex;           // tulosten indeksi, kasvaa, kun tulos lisätään
-    private int[] HashToResultsIndex;   // hash->results -taulukko
+    private int[] hashToResultsIndex;   // hash->results -taulukko
 
     private int collisions;             // törmäysten määrä (säätämiseen)
     private int resultsSize;            // koko results-taulukolle
@@ -38,7 +38,7 @@ public class DtspMemo {
         } else {
             hashSize = resultsSize * 5;
         }
-        this.HashToResultsIndex = new int[hashSize];
+        this.hashToResultsIndex = new int[hashSize];
         this.collisions = 0;
     }
     
@@ -51,9 +51,9 @@ public class DtspMemo {
      */
     private int hashFor(int start, int[] remaining) {
         int h = 1;
-        h = (h*7+start)%(hashSize);
+        h = (h * 7 + start) % (hashSize);
         for (int r : remaining) {
-            h = (h*7+r)%(hashSize);
+            h = (h * 7 + r) % (hashSize);
         }
         
         return h;
@@ -86,13 +86,13 @@ public class DtspMemo {
      * @return onko tulos taulukoituna
      */
     public boolean exists(int start, int[] remaining) {
-        if (HashToResultsIndex[hashFor(start, remaining)] == 0) {
+        if (hashToResultsIndex[hashFor(start, remaining)] == 0) {
             return false;
         }
 
-        DtspResult dr = results[ HashToResultsIndex[hashFor(start, remaining)] ];
+        DtspResult dr = results[ hashToResultsIndex[hashFor(start, remaining)] ];
 
-        while(true) {
+        while (true) {
             if (start == dr.start && arrayEquals(remaining, dr.remaining)) {
                 return true;
             }
@@ -116,12 +116,12 @@ public class DtspMemo {
         resultsIndex++;
         results[resultsIndex] = new DtspResult(start, remaining, result, predecessor);
 
-        if (HashToResultsIndex[ hashFor(start, remaining) ] == 0) {
-            HashToResultsIndex[ hashFor(start, remaining) ] = resultsIndex;
+        if (hashToResultsIndex[ hashFor(start, remaining) ] == 0) {
+            hashToResultsIndex[ hashFor(start, remaining) ] = resultsIndex;
         } else {
             collisions++;
 
-            DtspResult dr = results[ HashToResultsIndex[ hashFor(start, remaining) ] ];
+            DtspResult dr = results[ hashToResultsIndex[ hashFor(start, remaining) ] ];
             while (true) {
                 if (dr.next == -1) {
                     dr.next = resultsIndex;
@@ -140,9 +140,9 @@ public class DtspMemo {
      * @return dtsp-tulosolio
      */
     private DtspResult find(int start, int[] remaining) {
-        DtspResult dr = results[ HashToResultsIndex[ hashFor(start, remaining) ] ];
+        DtspResult dr = results[ hashToResultsIndex[ hashFor(start, remaining) ] ];
 
-        while(true) {
+        while (true) {
             if (start == dr.start && arrayEquals(remaining, dr.remaining)) {
                 return dr;
             }
@@ -186,6 +186,7 @@ public class DtspMemo {
     public int getResultsIndex() {
         return resultsIndex;
     }
+    
     public int getResultsSize() {
         return resultsSize;
     }

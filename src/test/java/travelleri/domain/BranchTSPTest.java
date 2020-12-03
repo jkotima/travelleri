@@ -17,6 +17,7 @@ public class BranchTSPTest {
         assertArrayEquals("The shortest path is correct", new int[] { 0, 2, 3, 1, 0 }, 
                 tsp.getShortestPath());
     }
+
     @Test
     public void knownBigGraphTest() {
         double[][] graph = { { 0.0, 8.0, 66.0, 68.0, 84.0, 24.0, 24.0, 28.0, 36.0, 10.0 },
@@ -33,9 +34,11 @@ public class BranchTSPTest {
         BranchTSP tsp = new BranchTSP(graph);
 
         assertEquals("Shortest path length is 199.0", 199, tsp.getShortestPathLength(), 1);
-        assertArrayEquals("The shortest path is correct", new int[] {0, 9, 3, 6, 7, 5, 8, 4, 2, 1, 0}, 
-                tsp.getShortestPath());
+        assertArrayEquals("The shortest path is correct", 
+                            new int[] {0, 9, 3, 6, 7, 5, 8, 4, 2, 1, 0}, 
+                            tsp.getShortestPath());
     }
+    
     @Test
     public void gettersTest() {
         double[][] graph = { { 0, 10 }, { 10, 0 } };
