@@ -114,7 +114,7 @@ Tässä käytetyt testit voi ajaa myös skriptistä
 
 Kuten arvata saattaa, vie DynamicTSP järkyttävästi muistia taulukoinnin käytön vuoksi isoilla verkoilla. Yllättäen DynamicTPS:n muistivaativuus näyttäisi olevan samaa luokkaa muiden algoritmien kanssa myös pienemmillä verkoilla. Kuutta solmua suuremmilla verkoilla NaiveTSP ja BranchTSP jäävät taakse nopeutensa lisäksi muistin käytössä.
 
-DynamicTSP:llä 24 solmun kohdalla tuli jo testikoneen käyttömuistin (16gb) rajat vastaan. Muistin sivutuksesta johtuvasta hidastumisesta ja suoritusajan kasvusta johtuen ei tällä algoritmilla ole enää mielekästä ratkoa tätä suurempia verkkoja, ainakaan tällä koneella.
+DynamicTSP:llä 24 solmun kohdalla tuli jo testikoneen käyttömuistin (16gb) rajat vastaan. Muistin sivutuksesta johtuvasta hidastumisesta ja suoritusajan kasvusta johtuen ei tällä toteutuksella ole enää mielekästä ratkoa tätä suurempia verkkoja, ainakaan tällä koneella.
 
 ApproxTSP:llä ei ole suurempia muistivaatimuksia.
 
