@@ -72,8 +72,8 @@ ApproxTSP:lle ei ole solmujen määrällä niinkään merkitystä suoritusaikaan
 ## Muistin käyttö
 
 Muistin käytön mittaaminen käytännössä suorituksen aikana osoittautui ongelmalliseksi johtuen Javan roskienkerääjän arvaamattomasta toiminnasta.
-Algoritmien muistinkäytöstä sai kuitenkiun jonkinlaisen kuvan tarkkalemalla käyttöjärjestelmätasolla, kuinka paljon Java-prosessi vei enintään käyttömuistia suorituksen aikana.
-Esimerkiksi testikoneella, jossa on Ubuntu 18.04, sai prosessin muistin käytön "peak-value" näkyviin (tässä suoritetaan BranchTSP 10 solmun verkolla)
+Algoritmien muistinkäytöstä sai kuitenkin jonkinlaisen kuvan tarkkalemalla käyttöjärjestelmätasolla, kuinka paljon Java-prosessi vei enintään käyttömuistia suorituksen aikana.
+Esimerkiksi testikoneella, jossa on Ubuntu 18.04, sai prosessin muistin käytön maksimin näkyviin (tässä suoritetaan BranchTSP 10 solmun verkolla)
 
 ```
 /usr/bin/time -v java -jar ./build/libs/travelleri.jar runPerformanceTest branch 10 10 1 |& grep Maximum
@@ -122,7 +122,7 @@ ApproxTSP:llä ei ole suurempia muistivaatimuksia.
 
 ![Muistin käyttö](./muisti.jpg)
 
-Syy DynamicTSP:n muistin käytön harppaukselle yli 14 solmun kohdalla on nähtävissä koodista - 14 suuremmille verkoille DtspMemo:ssa varataan mahdollisimman suuri hash-taulukko, joka vielä toimii (vähemmän törmäyksiä, suorituskykyetu).
+Syy DynamicTSP:n muistin käytön harppaukselle yli 14 solmulla johtuu siitä, että 14 suuremmille verkoille DtspMemo:ssa varataan mahdollisimman suuri hash-taulukko, joka vielä toimii. Tällöin tuli vähemmän törmäyksiä, mikä on hyväksi suorituskyvylle. Pienemmillä verkoilla algoritmi toimi nopeammin pienemmällä, solmumäärään suhteutetulla muistivarauksella.
 
 ## ApproxTSP:n polun pituus vs. optimipolku
 
