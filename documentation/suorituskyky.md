@@ -23,7 +23,7 @@ Jos ja kun Javan heap-space loppuu kesken (esim. ajettaessa ApproxTSP isoilla ve
 java -Xmx6g -jar ./build/libs/travelleri.jar runPerformanceTest dynamic 20 23 1
 ```
 
-Jarista ajamalla ohjelma toimii myös hieman nopeammin.
+Jarista ajamalla ohjelma saattaa toimia myös hieman nopeammin.
 
 ### Tulokset
 
@@ -38,9 +38,6 @@ Jarista ajamalla ohjelma toimii myös hieman nopeammin.
 | 8  | 404999348   | 1516081     | 211324      | 3670 |
 | 9  | 26299607848 | 4358703     | 511233      | 4246 |
 | 10 |             | 29974455    | 1296410     | 4289 |
-
-
-BranchTSP selviytyy kohtuullisessa ajassa 13 solmun verkoista, jonka jälkeen se hidastuu merkittävästi. DynamicTSP:ssä jokaisen lisäsolmun kohdalla suoritusaika n. kaksinkertaistuu. DynamicTSP toimi vielä ainakin 24 solmulla, mutta alkaa olla jo aika hidas.
 
 
 | Solmujen lkm | NaiveTSP suoritusaika (s) | BranchTSP suoritusaika (s) | DynamicTSP suoritusaika (s) | ApproxTSP suoritusaika (s) |
@@ -62,13 +59,17 @@ BranchTSP selviytyy kohtuullisessa ajassa 13 solmun verkoista, jonka jälkeen se
 | 24 |  |           | 332.882166 | 0.000003 |
 
 
-Huomataan, että DynamicTSP on huomattavasti nopein optimipolun tuottavista algoritmeista. Alle 7 solmun verkoista kevyempää tietorakennetta käyttävät algoritmin ovat hieman nopeampia, mutta tuskin niin paljoa, että sillä olisi käytännön merkitystä.
+Huomataan, että DynamicTSP on huomattavasti nopein optimipolun tuottavista algoritmeista. Alle 7 solmun verkoista kevyempää tietorakennetta käyttävät algoritmin ovat hieman nopeampia, mutta ei niin paljoa, että sillä olisi käytännön merkitystä.
 
-ApproxTSP:lle ei ole solmujen määrällä niinkään merkitystä suoritusaikaan - toisaalta se ei myöskään palauta optimipolkua. Kuitenkin yli 20 solmun verkoissa ApproxTSP alkaa olla näistä algoritmeista ainut käyttökelpoinen algoritmi, riippuen toki käyttötarkoituksesta.
+BranchTSP selviytyy kohtuullisessa ajassa 12 solmun verkoista, jonka jälkeen se hidastuu merkittävästi. Naive ei toimi järkevässä ajassa enää 8 solmun jälkeen.
+
+DynamicTSP:ssä jokaisen lisäsolmun kohdalla suoritusaika noin kaksinkertaistuu. DynamicTSP toimi vielä ainakin 24 solmulla, mutta alkaa olla jo aika hidas mihinkään käyttötarkoitukseen.
+
+ApproxTSP:lle ei ole solmujen määrällä niinkään merkitystä suoritusaikaan - toisaalta se ei myöskään palauta optimipolkua. Kuitenkin yli 20 solmun verkoissa ApproxTSP alkaa olla näistä algoritmeista ainut käyttökelpoinen algoritmi.
 
 ![Suorituskyky](./suorituskyky.jpg)
 
-## Algoritmien muistin käyttö
+## Muistin käyttö
 
 Muistin käytön mittaaminen käytännössä suorituksen aikana osoittautui ongelmalliseksi johtuen Javan roskienkerääjän arvaamattomasta toiminnasta.
 Algoritmien muistinkäytöstä sai kuitenkiun jonkinlaisen kuvan tarkkalemalla käyttöjärjestelmätasolla, kuinka paljon Java-prosessi vei enintään käyttömuistia suorituksen aikana.
@@ -111,13 +112,17 @@ Tässä käytetyt testit voi ajaa myös skriptistä
 | 23           |          |           | 6661624    | 46012     |
 | 24           |          |           | 12530180   | 46728     |
 
-Kuten arvata saattaa, vie DynamicTSP järkyttävästi muistia taulukoinnin käytön vuoksi isoilla verkoilla. Kuitenkin DynamicTPS:n muistivaativuus näyttäisi olevan samaa luokkaa muiden algoritmien kanssa myös pienemmillä verkoilla. Kuutta solmua suuremmilla verkoilla NaiveTSP ja BranchTSP jäävät taakse nopeutensa lisäksi muistin käytössä.
+Kuten arvata saattaa, vie DynamicTSP järkyttävästi muistia taulukoinnin käytön vuoksi isoilla verkoilla. Yllättäen DynamicTPS:n muistivaativuus näyttäisi olevan samaa luokkaa muiden algoritmien kanssa myös pienemmillä verkoilla. Kuutta solmua suuremmilla verkoilla NaiveTSP ja BranchTSP jäävät taakse nopeutensa lisäksi muistin käytössä.
 
-ApproxTSP ei sen sijaan ei tarvitse muistia juurikaan mihinkään.
+DynamicTSP:llä 24 solmun kohdalla tuli jo testikoneen käyttömuistin (16gb) rajat vastaan. Muistin sivutuksesta johtuvasta hidastumisesta ja suoritusajan kasvusta johtuen ei tällä algoritmilla ole enää mielekästä ratkoa tätä suurempia verkkoja, ainakaan tällä koneella.
+
+ApproxTSP:llä ei ole suurempia muistivaatimuksia.
 
 ### Java-prosessin muistin käyttö, Gb
 
 ![Muistin käyttö](./muisti.jpg)
+
+Syy DynamicTSP:n muistin käytön harppaukselle yli 14 solmun kohdalla on nähtävissä koodista - 14 suuremmille verkoille DtspMemo:ssa varataan mahdollisimman suuri hash-taulukko, joka vielä toimii (vähemmän törmäyksiä, suorituskykyetu).
 
 ## ApproxTSP:n polun pituus vs. optimipolku
 

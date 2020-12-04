@@ -191,14 +191,15 @@ public class ConsoleUI {
 
         for (int nodesCount = startNodesCount; nodesCount <= maxNodesCount; 
                                 nodesCount++) {
-
-            double[][] graph = generateRandomGraph(nodesCount);
-            
+                                    
             TSP tsp;
             long t = System.nanoTime();
             long tAcc = 0;
 
             for (int i = 0; i < repeats; i++) {
+                
+                double[][] graph = generateRandomGraph(nodesCount);
+
                 switch (algorithm) {
                     case "naive":
                         tsp = new NaiveTSP(graph);
