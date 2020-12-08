@@ -22,7 +22,7 @@ public class OsrmFetch {
                 first = false;
                 allCoords += c[1] + "," + c[0];
             } else {
-                allCoords += ";" + c[1]+"," + c[0];
+                allCoords += ";" + c[1] + "," + c[0];
             }
         }
 

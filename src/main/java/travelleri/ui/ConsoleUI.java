@@ -1,5 +1,8 @@
 package travelleri.ui;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,9 +27,11 @@ public class ConsoleUI {
 
     public void run() throws Exception {
         if (args.length == 0) {
+
             System.out.println("1. luo uusi verkko ja tallenna se tiedostoon");
             System.out.println("2. avaa verkko tiedostosta");
-            System.out.println("3. aja suorituskykytesti kaikille algoritmeille");
+            System.out.println("3. pasteta koordinaatteja GoogleMapsista"
+                                 + "ja aja niille dynaaminenalgoritmi");
 
 
             while (!scan.hasNextInt()) {
@@ -42,6 +47,9 @@ public class ConsoleUI {
                     break;
                 case 2:
                     openGraph();
+                    break;
+                case 3:
+                    pasteCoordinates();
                     break;
                 default:
                     return;
@@ -113,6 +121,33 @@ public class ConsoleUI {
         }
 
     }
+
+    private static String readClipboard() throws Exception {
+        return (String) Toolkit
+                            .getDefaultToolkit()
+                            .getSystemClipboard()
+                            .getData(DataFlavor.stringFlavor);
+    }
+
+    private void pasteCoordinates() throws Exception {
+        System.out.println("Kopioi koordinaatteja leikepöydälle. " 
+                            + "Kun olet valmis, paina mitä tahansa näppäintä");
+        String clipboardtxt = readClipboard();
+        int i = 0;
+        String[][] coords = new String[100][2];
+        while (System.in.available() == 0) {
+            if (!readClipboard().equals(clipboardtxt)) {
+                System.out.println(readClipboard());
+                coords[i][0] = readClipboard().split(", ")[0];
+                coords[i][1] = readClipboard().split(", ")[1];
+                clipboardtxt = readClipboard();
+                i++;
+            }
+        }
+
+        runFromCoordinates(Arrays.copyOf(coords, i), "dynamic");
+    }
+
     private String googleMapsLink(int[] path, String[][] coordinates) {
         String link = "https://www.google.com/maps/dir/";
         for (int p : path) {
