@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter; 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class FileIO {
@@ -47,5 +49,24 @@ public class FileIO {
         }
         fw.close();
 
+    }
+
+    public static String[][] openCoordinatesFromFile(String filename) throws FileNotFoundException {
+        File f = new File(filename);
+        Scanner sc = new Scanner(f);           
+
+        String[][] coords = new String[100][2];
+        int i = 0;
+        while (sc.hasNextLine()) {
+            String[] splittedNextLine = sc.nextLine().split(", ");
+
+            coords[i][0] = splittedNextLine[0];
+            coords[i][1] = splittedNextLine[1];
+
+            i++;
+        }
+        sc.close();
+
+        return Arrays.copyOf(coords, i);
     }
 }

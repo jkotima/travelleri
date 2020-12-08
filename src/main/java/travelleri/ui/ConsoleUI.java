@@ -11,6 +11,7 @@ import travelleri.domain.DynamicTSP;
 import travelleri.domain.NaiveTSP;
 import travelleri.domain.TSP;
 import travelleri.io.FileIO;
+import travelleri.io.OsrmFetch;
 
 public class ConsoleUI {
     private String[] args;
@@ -100,6 +101,52 @@ public class ConsoleUI {
             runPerformanceTest(args[1], Integer.parseInt(args[2]), 
                         Integer.parseInt(args[3]),Integer.parseInt(args[4]));
         }
+
+        if (args[0].equals("runFromCoordinates")) {
+            String[][] coords = FileIO.openCoordinatesFromFile(args[1]);
+            
+            if (args.length == 2) {
+                runFromCoordinates(coords, "dynamic");
+            } else {
+                runFromCoordinates(coords, args[2]);
+            }
+        }
+
+    }
+    private String googleMapsLink(int[] path, String[][] coordinates) {
+        String link = "https://www.google.com/maps/dir/";
+        for (int p : path) {
+            link += coordinates[p][0] + "," + coordinates[p][1] + "/";
+        }
+        return link;
+    }
+
+    private void runFromCoordinates(String[][] coords, String algorithm) throws Exception {
+        double[][] graph = OsrmFetch.fetchFromOsmr(coords);
+        TSP tsp;
+
+        switch (algorithm) {
+            case "naive":
+                tsp = new NaiveTSP(graph);
+                break;
+            case "branch":
+                tsp = new BranchTSP(graph);
+                break;
+            case "dynamic":
+                tsp = new DynamicTSP(graph);
+                break;
+            case "approx":
+                tsp = new ApproxTSP(graph);
+                break;
+            default:
+                return;
+        }
+        tsp.run();
+
+        System.out.println(Arrays.toString(tsp.getShortestPath()));
+        System.out.println("Kokonaismatka: " + tsp.getShortestPathLength());
+        System.out.println(googleMapsLink(tsp.getShortestPath(), coords));
+
     }
 
     private void runApprox(double[][] graph) {
