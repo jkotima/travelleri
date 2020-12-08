@@ -1,10 +1,8 @@
 package travelleri.ui;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.Random;
 import travelleri.domain.ApproxTSP;
 import travelleri.domain.BranchTSP;
 import travelleri.domain.DynamicTSP;
@@ -26,10 +24,10 @@ public class ConsoleUI {
         if (args.length == 0) {
 
             System.out.println("1. luo uusi verkko ja tallenna se tiedostoon");
-            System.out.println("2. avaa verkko tiedostosta");
+            System.out.println("2. avaa verkko tiedostosta ja aja algoritmi");
             System.out.println("3. pasteta koordinaatteja GoogleMapsista"
-                                 + " ja aja niille dynaaminen algoritmi");
-            System.out.println("4. aja suorituskykytesti satunnaisverkoille (default)");
+                                 + " ja aja dynaaminen algoritmi");
+            System.out.println("4. aja default suorituskykytesti satunnaisverkoille");
 
             while (!scan.hasNextInt()) {
                 scan.next();

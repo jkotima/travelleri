@@ -8,7 +8,6 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.Scanner;
 
-
 public class OsrmFetch {
     private class OsrmData {
         private double[][] distances;

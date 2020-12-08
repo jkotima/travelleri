@@ -5,13 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Random;
-import travelleri.domain.ApproxTSP;
-import travelleri.domain.BranchTSP;
-import travelleri.domain.DynamicTSP;
-import travelleri.domain.NaiveTSP;
-import travelleri.domain.TSP;
 import travelleri.io.FileIO;
-import travelleri.io.OsrmFetch;
 
 public class GraphTool {
     public static void open(Scanner scan) throws FileNotFoundException {
