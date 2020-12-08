@@ -27,12 +27,12 @@ public class ConsoleUI {
 
     public void run() throws Exception {
         if (args.length == 0) {
-
+            
             System.out.println("1. luo uusi verkko ja tallenna se tiedostoon");
             System.out.println("2. avaa verkko tiedostosta");
             System.out.println("3. pasteta koordinaatteja GoogleMapsista"
-                                 + "ja aja niille dynaaminenalgoritmi");
-
+                                 + " ja aja niille dynaaminen algoritmi");
+            System.out.println("4. aja suorituskykytesti satunnaisverkoille (default)");
 
             while (!scan.hasNextInt()) {
                 scan.next();
@@ -51,6 +51,13 @@ public class ConsoleUI {
                 case 3:
                     pasteCoordinates();
                     break;
+                case 4:
+                    runPerformanceTest("naive", 2, 7, 10);
+                    runPerformanceTest("branch", 2, 10, 10);
+                    runPerformanceTest("dynamic", 2, 15, 10);
+                    runPerformanceTest("approx", 2, 15, 10);
+                    break;
+
                 default:
                     return;
             }
@@ -303,7 +310,7 @@ public class ConsoleUI {
                 tsp.run();
                 t = System.nanoTime() - t;
 
-                System.out.println((i + 1) + ". tulos: " + t);
+                //System.out.println((i + 1) + ". tulos: " + t);
                 tAcc += t;
             }
             
