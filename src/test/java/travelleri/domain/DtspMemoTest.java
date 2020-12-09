@@ -20,6 +20,12 @@ public class DtspMemoTest {
     }
 
     @Test
+    public void doesNotExistTest() {
+        assertFalse("Non existing result does not exists 1", dtspmemo.exists(1, new int[] {2}));
+        assertFalse("Non existing result does not exists 2", dtspmemo.exists(2, new int[] {1,3}));
+    }
+
+    @Test
     public void addTest() {
         dtspmemo.add(6, new int[] {7,8}, 321, 1);
         assertTrue("Added result exists", dtspmemo.exists(6, new int[] {7,8}));
@@ -34,7 +40,7 @@ public class DtspMemoTest {
     @Test
     public void findPredecessorTest() {
         assertEquals("Predecessor returned correctly", 0, 
-                        dtspmemo.findPredecessor(1, new int[] {2,3}), 1);
+                        dtspmemo.findPredecessor(1, new int[] {2,3}));
     }
 
     @Test
@@ -43,5 +49,4 @@ public class DtspMemoTest {
         assertEquals("Collisions = 1", dtspmemo.getCollisions(), 1);
         assertEquals("Total results = 2", dtspmemo.getResultsIndex(), 2);
     }
-
 }

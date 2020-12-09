@@ -32,8 +32,8 @@ public class NodeListTest {
     @Test
     public void copyConstructorTest() {
         NodeList copy = new NodeList(nl);
-        assertArrayEquals("Returned path is correct", new int[] { 1,2,3,4,5 },
+        assertArrayEquals("Returned path of copied list is correct", new int[] { 1,2,3,4,5 },
                         copy.getPath());
-        assertEquals("Last node is correct", 5, copy.getLast());
+        assertEquals("Last node of copied list is correct", 5, copy.getLast());
     }
 }
