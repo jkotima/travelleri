@@ -63,14 +63,6 @@ public class ConsoleUI {
             return;
         }
 
-        if (args[0].equals("create")) {
-            GraphTool.create(scan);
-        }
-
-        if (args[0].equals("open")) {
-            GraphTool.open(scan);
-        }
-
         if (args[0].equals("runNaive")) {
             if (args.length == 1) {
                 throw new FileNotFoundException();
