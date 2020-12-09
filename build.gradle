@@ -27,11 +27,12 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.0-jre'
 
+    // gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 
-    // gson
-    implementation 'com.google.code.gson:gson:2.8.6'
 }
 
 application {
@@ -58,6 +59,14 @@ jacocoTestReport {
             fileTree(dir: it, exclude: ['travelleri/Main.class', 'travelleri/ui/**', , 'travelleri/io/**'])
 
         }))
+    }
+}
+
+sourceSets {
+    main {
+        java {
+               srcDirs =['src/main/java']
+        }
     }
 }
 
