@@ -1,10 +1,11 @@
 package travelleri.ui;
+
 import java.util.Random;
-import travelleri.domain.TSP;
 import travelleri.domain.ApproxTSP;
 import travelleri.domain.BranchTSP;
 import travelleri.domain.DynamicTSP;
 import travelleri.domain.NaiveTSP;
+import travelleri.domain.TSP;
 
 public class PerformanceTest {
     private static double[][] generateRandomGraph(int nodesCount) {

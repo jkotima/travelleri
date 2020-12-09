@@ -3,8 +3,8 @@ package travelleri.ui;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Scanner;
 import java.util.Random;
+import java.util.Scanner;
 import travelleri.io.FileIO;
 
 public class GraphTool {
