@@ -1,6 +1,8 @@
 # travelleri
 Tietorakenteet ja algoritmit, harjoitustyö
 
+[Käyttöohje](../master/documentation/kayttoohje.md)
+
 [Määrittelydokumentti](../master/documentation/maarittely.md)
 
 [Toteutus](../master/documentation/toteutus.md)
