@@ -13,7 +13,7 @@ public class ApproxTSP implements TSP {
     private double shortestPathLength; // laskettu lyhyimmän polun pituus
     private int[] shortestPath; // laskettu verkon lyhyin polku
     private boolean ran; // onko algoritmi suoritettu
-    private NodeList currentPath;
+    private NodeList currentPath; // tämän hetkinen polku
     
     /**
      * Konstruktori.
@@ -36,14 +36,13 @@ public class ApproxTSP implements TSP {
 
     /**
      * Toteuttaa Primin algoritmin mukaisen verkon läpikäynnin, jossa valitaan aina
-     * solmun lähimpänä oleva naapuri ja edetään sinne
+     * solmun lähimpänä oleva naapuri ja edetään sinne.
      * 
-     * currentPath ja currentPathLength ovat "lisänä" ns. lyhimmän polun solmujen
-     * kirjanpitoa varten. Tallentaa lopputuloksen oliomuuttujiin shortestPath ja
+     * currentPathLength on lyhimmän polun mittausta varten.
+     * Tallentaa lopputuloksen oliomuuttujiin shortestPath ja
      * shortestPathLength, kun kaikki verkon solmut on käyty läpi.
      * 
      * @param currentNode       aloitussolmu
-     * @param currentPath       tämänhetkinen polku
      * @param currentPathLength tämänhetkinen polun pituus
      */
     private void primMST(int currentNode, double currentPathLength) {

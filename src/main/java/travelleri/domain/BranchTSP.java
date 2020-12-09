@@ -2,8 +2,8 @@ package travelleri.domain;
 
 /**
  * Etsii lyhyimmän polun syötetystä verkosta niin, että polku kulkee kaikkien
- * verkon solmujen kautta palaten takaisin lähtösolmuun. Algoritmin peruuttavan haun
- * branch and bound -toteutus.
+ * verkon solmujen kautta palaten takaisin lähtösolmuun. Peruuttavaa hakua ja
+ * branch and boundia käyttävä toteutus.
  */
 public class BranchTSP implements TSP {
     private double[][] graph; // verkko
@@ -35,10 +35,10 @@ public class BranchTSP implements TSP {
     }
 
     /**
-     * Lisää arvon listan loppuun. Apumetodi primMST() -metodille.
+     * Peruuttava haku.
      * 
-     * @param node lista, johon arvo lisätään
-     * @param pathLength arvo, joka lisätään listaan
+     * @param node käsiteltävä solmu
+     * @param pathLength tämänhetkinen polun pituus
      * @param currentPath tämänhetkinen polku
      */
     private void backtrack(int node, double pathLength, NodeList currentPath) {
@@ -77,9 +77,9 @@ public class BranchTSP implements TSP {
         for (int i = 1; i < nodesCount; i++) {
             remaining[i - 1] = i;
         }
-        NodeList startti = new NodeList(nodesCount + 1);
-        startti.add(0);
-        backtrack(1, 0, startti);
+        NodeList start = new NodeList(nodesCount + 1);
+        start.add(0);
+        backtrack(1, 0, start);
         ran = true;
     }
 
