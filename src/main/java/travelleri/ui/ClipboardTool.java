@@ -5,6 +5,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.util.Arrays;
 
+/**
+* Työkalu, johon voidaan syöttää (GoogleMaps) koordinaatteja suoraan leikepöydältä
+* ja saada TSP-reitistä GoogleMaps-yhteensopiva linkki.
+*/
 public class ClipboardTool {
     private static String readClipboard() throws Exception {
         return (String) Toolkit

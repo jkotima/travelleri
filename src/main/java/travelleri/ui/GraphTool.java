@@ -7,6 +7,9 @@ import java.util.Random;
 import java.util.Scanner;
 import travelleri.io.FileIO;
 
+/**
+* Verkkojen luomiseen, avaamiseen ajamista varten
+*/
 public class GraphTool {
     public static void open(Scanner scan) throws FileNotFoundException {
         System.out.print("Anna avattavan tiedoston nimi: ");

@@ -8,6 +8,10 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+* Luokka, jolla voi avata koordinaatit ja verkon tiedostosta, sekä
+* tallentaa verkon tiedostoon. 
+ */
 public class FileIO {
     public static double[][] openGraphFromFile(String filename) throws FileNotFoundException {
         File f = new File(filename);

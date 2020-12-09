@@ -11,6 +11,9 @@ import travelleri.domain.TSP;
 import travelleri.io.FileIO;
 import travelleri.io.OsrmFetch;
 
+/**
+* Komentorivipohjainen käyttöliittymä
+ */
 public class ConsoleUI {
     private String[] args;
     private Scanner scan;

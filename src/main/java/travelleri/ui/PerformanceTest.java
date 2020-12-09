@@ -7,6 +7,9 @@ import travelleri.domain.DynamicTSP;
 import travelleri.domain.NaiveTSP;
 import travelleri.domain.TSP;
 
+/**
+* Suorituskykytesti satunnaisverkoilla
+*/
 public class PerformanceTest {
     private static double[][] generateRandomGraph(int nodesCount) {
         Random r = new Random();
