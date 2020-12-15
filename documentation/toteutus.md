@@ -50,8 +50,6 @@ Törmäyksien hallinta on toteutettu linkittämällä, eli jokaisessa tulos-olio
 
 ## ApproxTSP
 
-Approksimaatioalgoritmi perustuu [Primin algoritmin](https://en.wikipedia.org/wiki/Prim%27s_algorithm) tapaiseen verkon läpikäyntiin.
-
 Solmuissa eteneminen on toteutettu rekursiivisesti. Rekursio etenee aina lähimpään vierailemattomaan solmuun pitämällä samalla kirjaa kokonaismatkasta. Kun kaikki solmut on käyty läpi, tallennetaan tulos shortestPath-muuttujaan.
 
 Reitti tallennetaan muistiin käyttämällä apuna *NodeList*-tietorakennetta.

@@ -9,7 +9,7 @@ package travelleri.domain;
 public class ApproxTSP implements TSP {
     private double[][] graph; // solmujen määrä
     private int nodesCount; // verkko
-    private boolean[] visited; // primMST apumuuttuja (onko solmussa käyty)
+    private boolean[] visited; // closestNeighborPath apumuuttuja (onko solmussa käyty)
     private double shortestPathLength; // laskettu lyhyimmän polun pituus
     private int[] shortestPath; // laskettu verkon lyhyin polku
     private boolean ran; // onko algoritmi suoritettu
@@ -35,17 +35,15 @@ public class ApproxTSP implements TSP {
     }
 
     /**
-     * Toteuttaa Primin algoritmin mukaisen verkon läpikäynnin, jossa valitaan aina
-     * solmun lähimpänä oleva naapuri ja edetään sinne.
+     * Valitaan aina solmun lähimpänä oleva naapuri ja edetään sinne.
      * 
-     * currentPathLength on lyhimmän polun mittausta varten.
      * Tallentaa lopputuloksen oliomuuttujiin shortestPath ja
      * shortestPathLength, kun kaikki verkon solmut on käyty läpi.
      * 
      * @param currentNode       aloitussolmu
      * @param currentPathLength tämänhetkinen polun pituus
      */
-    private void primMST(int currentNode, double currentPathLength) {
+    private void closestNeighborPath(int currentNode, double currentPathLength) {
         currentPath.add(currentNode);
         visited[currentNode] = true;
 
@@ -72,7 +70,7 @@ public class ApproxTSP implements TSP {
             return;
         }
         
-        primMST(closestNeighbor, currentPathLength + minWeight);
+        closestNeighborPath(closestNeighbor, currentPathLength + minWeight);
     }
 
     /**
@@ -80,7 +78,7 @@ public class ApproxTSP implements TSP {
      */
     @Override
     public void run() {
-        primMST(0, 0);
+        closestNeighborPath(0, 0);
         ran = true;
     }
 
