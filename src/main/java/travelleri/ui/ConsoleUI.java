@@ -18,9 +18,9 @@ public class ConsoleUI {
     private String[] args;
     private Scanner scan;
 
-    public ConsoleUI(String[] args) {
+    public ConsoleUI(String[] args, Scanner scan) {
         this.args = args;
-        this.scan = new Scanner(System.in);
+        this.scan = scan;
     }
 
     public void run() throws Exception {

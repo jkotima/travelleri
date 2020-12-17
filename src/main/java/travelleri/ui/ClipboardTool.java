@@ -2,7 +2,6 @@ package travelleri.ui;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.util.Arrays;
 
 /**
