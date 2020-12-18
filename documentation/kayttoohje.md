@@ -9,15 +9,11 @@
 ## Uuden verkon luominen tiedostoon
 Valitse valikosta "1. luo uusi verkko ja tallenna se tiedostoon"
 
-Vastaa esitettyihin kysymyksiin.
-
 Tiedostot voi tehdä myös tavanomaisilla tekstieditoreilla: pilkku erottaa etäisyysmatriisin sarakkeen, rivinvaihto rivin.
 
 ## Algoritmin ajaminen tiedostossa olevalle verkolle
 ### Käyttöliittymästä
 Valitse valikosta "2. avaa verkko tiedostosta ja aja algoritmi"
-
-Vastaa esitettyihin kysymyksiin.
 
 ### Komentoriviltä
 ```
@@ -83,6 +79,18 @@ Valitse "4. aja default suorituskykytesti satunnaisverkoille"
 
 Esim.
 ./gradlew run --args "runPerformanceTest naive 2 6 10" --console=plain
+```
+### Testi ApproxTSP:n polun pituudelle suhteessa optimipolkuun
+Valitse "5. aja testi ApproxTSP:n polun pituudelle suhteessa optimipolkuun"
+
+### Testi ApproxTSP:n polun pituudelle suhteessa optimipolkuun, komentoriviltä
+```
+./gradlew run --args "runApproxPathTest [aloitusVerkkokoko] [lopetusVerkkokoko] [toistotPerVerkkokoko]" --console=plain
+
+Esim.
+
+./gradlew run --args "runApproxPathTest 10 10 10" --console=plain
+
 ```
 
 ## Gradleen liittyvät komennot

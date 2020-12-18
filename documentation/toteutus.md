@@ -10,7 +10,7 @@ Kun n on solmujen lukuäärä, permutaatioden generointi vie aikaa O(n!) (permut
 
 Dynaamisessa toteutuksessa hyödynnetään lyhimmän polun palauttavaa rekursiivista esitystä
 ```
-dtsp(start, {remaining}) = min(graph[start][k] + dtsp(k, {remaining}-{k})),
+dtsp(start, {remaining}) = min(graph[start][k] + dtsp(k, {remaining}\{k})),
 jossa k ∈ {remaining}.
 ```
 
@@ -56,11 +56,13 @@ Reitti tallennetaan muistiin käyttämällä apuna *NodeList*-tietorakennetta.
 
 Laskettu polku ei siis missään nimessa kaikissa tapauksissa ole optimipolku, mutta algoritmi on nopea: jos n on solmujen lukumäärä, aikavaativuus on vain O(n²) (käytössä solmut läpi käyvä rekursio, jonka sisällä yksi jäljellä olevat solmut läpi käyvä silmukka).
 
+Algoritmi toimii samalla tavalla kuin [nearest neighbor algorithm.](https://en.wikipedia.org/wiki/Nearest_neighbour_algorithm)
+
 ## BranchTSP
 
 Algoritmi perustuu peruuttavaan hakuun ja sitä nopeuttavaan branch-and-bound -tekniikkan.
 
-Algoritmi käy järjestelmällisesti läpi kaikki yhdistelmät (O(n!)). Kuitenkin, jos sen hetkinsen läpikäytävän polun pituus on kasvanut yli lyhyimmän siihen mennessä löydetyn polun, lopetetaan kyseisen haaran läpikäynti. Tämä nopeuttaa laskentaa huomattavasti.
+Algoritmi käy järjestelmällisesti läpi kaikki yhdistelmät (O(n!)). Kuitenkin, jos sen hetkisen läpikäytävän polun pituus on kasvanut yli lyhyimmän siihen mennessä löydetyn polun, lopetetaan kyseisen haaran läpikäynti. Tämä nopeuttaa laskentaa huomattavasti.
 
 ## NodeList
 
@@ -78,8 +80,9 @@ Käyttöliittymään on toteutettu:
 * algoritmien suoritus
     * algoritmien suoritusajan mittaus
     * lyhimmän polun, polun pituuden ja suoritusajan tulostus
-* suorituskykytesti satunnaisverkoilla
 * osoitekoordinaattejen perusteella suoritettava reitin laskenta
+* suorituskykytesti satunnaisverkoilla
+* testi ApproxTSP-algoritmin polun pituudelle suhteessa optimipolkuun
 
 ## I/O
 
