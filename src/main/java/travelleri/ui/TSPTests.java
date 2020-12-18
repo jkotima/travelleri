@@ -1,6 +1,5 @@
 package travelleri.ui;
 
-import java.util.Arrays;
 import java.util.Random;
 import travelleri.domain.ApproxTSP;
 import travelleri.domain.BranchTSP;
@@ -9,7 +8,7 @@ import travelleri.domain.NaiveTSP;
 import travelleri.domain.TSP;
 
 /**
-* Suorituskykytesti satunnaisverkoilla
+* Suorituskykytestit TSP-algoritmeille
 */
 public class TSPTests {
     private static double[][] generateRandomGraph(int nodesCount) {
@@ -74,7 +73,6 @@ public class TSPTests {
                 tsp.run();
                 t = System.nanoTime() - t;
 
-                //System.out.println((i + 1) + ". tulos: " + t);
                 tAcc += t;
             }
             
@@ -99,14 +97,14 @@ public class TSPTests {
                 TSP dynamicTSP = new DynamicTSP(graph);
                 TSP approxTSP = new ApproxTSP(graph);
 
-                //System.out.println(approxTSP.getShortestPathLength()+ "/" + dynamicTSP.getShortestPathLength());
-                double ratio = approxTSP.getShortestPathLength() / dynamicTSP.getShortestPathLength();
+                double ratio = approxTSP.getShortestPathLength() 
+                                / dynamicTSP.getShortestPathLength();
                 maxRatio = Math.max(maxRatio, ratio);
                 ratioAcc += ratio;
             }
 
             System.out.println("Polun pituuden suhde optimipolkuun " + nodesCount 
-            + " solmuisilla verkoilla keskimäärin: " + ratioAcc / repeats);
+                + " solmuisilla verkoilla keskimäärin: " + ratioAcc / repeats);
             System.out.println("Maksimisuhde: " + maxRatio);
         }
     }

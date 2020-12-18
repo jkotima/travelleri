@@ -5,13 +5,18 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+import travelleri.domain.ApproxTSP;
+import travelleri.domain.BranchTSP;
+import travelleri.domain.DynamicTSP;
+import travelleri.domain.NaiveTSP;
+import travelleri.domain.TSP;
 import travelleri.io.FileIO;
 
 /**
-* Verkkojen luomiseen, avaamiseen ajamista varten
+* Verkkojen luomista, avaamista, ajamista varten
 */
 public class GraphTool {
-    public static void open(Scanner scan) throws FileNotFoundException {
+    public static void opener(Scanner scan) throws FileNotFoundException {
         System.out.print("Anna avattavan tiedoston nimi: ");
         String filename = scan.nextLine();
         double[][] graph = FileIO.openGraphFromFile(filename);
@@ -26,27 +31,28 @@ public class GraphTool {
         }
         int selection = scan.nextInt();
         scan.nextLine();
-
+        TSP tsp;
         switch (selection) {
             case 1:
-                ConsoleUI.runNaive(graph);
+                tsp = new NaiveTSP(graph);
                 break;
             case 2:
-                ConsoleUI.runDynamic(graph);
+                tsp = new DynamicTSP(graph);
                 break;
             case 3:
-                ConsoleUI.runApprox(graph);
+                tsp = new ApproxTSP(graph);
                 break;
             case 4:
-                ConsoleUI.runBranch(graph);
+                tsp = new BranchTSP(graph);;
                 break;
             default:
                 return;
-
         }
+
+        runTSP(tsp);
     }
 
-    public static void create(Scanner scan) throws IOException {
+    public static void creater(Scanner scan) throws IOException {
         System.out.print("Solmujen lukumäärä? ");
         while (!scan.hasNextInt()) {
             scan.next();    
@@ -119,5 +125,18 @@ public class GraphTool {
         }
         
         FileIO.saveGraphToFile(filename, newGraph);
+    }
+
+    public static void runTSP(TSP tsp) {
+        System.out.println("Ajetaan algoritmi...");
+        long t = System.nanoTime();
+        tsp.run();
+        t = System.nanoTime() - t;
+
+        System.out.println("Suoritusaika: " + t + " ns");
+        System.out.println("Lyhin polku:");
+        System.out.println(Arrays.toString(tsp.getShortestPath()));
+        System.out.println("Lyhimmän polun pituus:");
+        System.out.println(tsp.getShortestPathLength());
     }
 }
