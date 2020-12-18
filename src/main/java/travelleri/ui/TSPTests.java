@@ -1,5 +1,6 @@
 package travelleri.ui;
 
+import java.util.Arrays;
 import java.util.Random;
 import travelleri.domain.ApproxTSP;
 import travelleri.domain.BranchTSP;
@@ -22,13 +23,12 @@ public class TSPTests {
                     randomGraph[x][y] = 0;
                     continue;
                 }
+                
                 if (randomGraph[y][x] != 0) {
                     randomGraph[x][y] = randomGraph[y][x];
                     continue;
                 }
-
                 randomGraph[x][y] = 100 * r.nextDouble();
-                break;
             }
         }
 
@@ -82,6 +82,29 @@ public class TSPTests {
                                 + " solmuisilla verkoilla keskimäärin: " 
                                 + tAcc / repeats + " ns (" 
                                 + (double) (tAcc / repeats) / 1000000000 + "s)");
+        }
+    }
+
+    public static void runApproxPathTest(int startNodesCount, int maxNodesCount, int repeats) {
+        System.out.println("**Testataan ApproxTSP:n polun pituus suhteessa optimipolkuun " 
+                            + startNodesCount + "..."
+                            + maxNodesCount + " solmuisella satunnaisverkoilla ("
+                            + repeats + " testiä/verkkokoko)**"); 
+        
+        for (int nodesCount = startNodesCount; nodesCount <= maxNodesCount; nodesCount++) {
+            double ratioAcc = 0;
+            for (int i = 0; i < repeats; i++) {
+                double[][] graph = generateRandomGraph(nodesCount);
+                TSP dynamicTSP = new DynamicTSP(graph);
+                TSP approxTSP = new ApproxTSP(graph);
+                System.out.println(Arrays.deepToString(graph));
+                System.out.println(approxTSP.getShortestPathLength()+ "/" + dynamicTSP.getShortestPathLength());
+
+                ratioAcc += approxTSP.getShortestPathLength() / dynamicTSP.getShortestPathLength();
+            }
+
+            System.out.println("Approx-polun pituus suhteessa optimipolkuun " + nodesCount 
+            + " solmuisilla verkoilla keskimäärin: " + ratioAcc / repeats);
         }
     }
 }

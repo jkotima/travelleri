@@ -31,6 +31,7 @@ public class ConsoleUI {
             System.out.println("3. pasteta koordinaatteja GoogleMapsista"
                                  + " ja aja dynaaminen algoritmi");
             System.out.println("4. aja default suorituskykytesti satunnaisverkoille");
+            System.out.println("5. aja testi ApproxTSP:n polun pituudelle suhteessa optimipolkuun");
 
             while (!scan.hasNextInt()) {
                 scan.next();
@@ -55,7 +56,9 @@ public class ConsoleUI {
                     TSPTests.runPerformanceTest("dynamic", 2, 15, 10);
                     TSPTests.runPerformanceTest("approx", 2, 15, 10);
                     break;
-
+                case 5:
+                    TSPTests.runApproxPathTest(5, 5, 1);
+                    break;
                 default:
                     return;
             }

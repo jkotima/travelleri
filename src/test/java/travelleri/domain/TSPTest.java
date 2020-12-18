@@ -25,7 +25,6 @@ public class TSPTest {
                 }
 
                 randomGraph[x][y] = 100 * r.nextDouble();
-                break;
             }
         }
 
