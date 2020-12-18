@@ -93,18 +93,21 @@ public class TSPTests {
         
         for (int nodesCount = startNodesCount; nodesCount <= maxNodesCount; nodesCount++) {
             double ratioAcc = 0;
+            double maxRatio = Double.MIN_VALUE;
             for (int i = 0; i < repeats; i++) {
                 double[][] graph = generateRandomGraph(nodesCount);
                 TSP dynamicTSP = new DynamicTSP(graph);
                 TSP approxTSP = new ApproxTSP(graph);
-                System.out.println(Arrays.deepToString(graph));
-                System.out.println(approxTSP.getShortestPathLength()+ "/" + dynamicTSP.getShortestPathLength());
 
-                ratioAcc += approxTSP.getShortestPathLength() / dynamicTSP.getShortestPathLength();
+                //System.out.println(approxTSP.getShortestPathLength()+ "/" + dynamicTSP.getShortestPathLength());
+                double ratio = approxTSP.getShortestPathLength() / dynamicTSP.getShortestPathLength();
+                maxRatio = Math.max(maxRatio, ratio);
+                ratioAcc += ratio;
             }
 
-            System.out.println("Approx-polun pituus suhteessa optimipolkuun " + nodesCount 
+            System.out.println("Polun pituuden suhde optimipolkuun " + nodesCount 
             + " solmuisilla verkoilla keskimäärin: " + ratioAcc / repeats);
+            System.out.println("Maksimisuhde: " + maxRatio);
         }
     }
 }

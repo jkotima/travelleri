@@ -12,12 +12,14 @@ Satunnaisen verkon suorituskykytestit ajetaan komentoriviltä algoritmille seura
 ```
 ./gradlew run --args "runPerformanceTest [algoritmi] [aloitusverkkokoko] [maksimiverkkokoko] [toistot per verkkokoko]" --console=plain
 
-Esim.
+Esimerkiksi
 
 ./gradlew run --args "runPerformanceTest naive 2 8 10" --console=plain
+
+ajaa suorituskykytestin NaiveTSP-algoritmille 2...8 solmuisilla verkoilla, toistaen testin 10 kertaa per verkkokoko.
 ```
 
-Jos ja kun Javan heap-space loppuu kesken (esim. ajettaessa ApproxTSP isoilla verkoilla), voi ohjelman pakata jariksi ja kekomuistivarausta kasvattaa (tässä 6 gigaa):
+Jos ja kun Javan heap-space loppuu kesken (esim. ajettaessa DynamicTSP isoilla verkoilla), voi ohjelman pakata jariksi ja kekomuistivarausta kasvattaa (tässä 6 gigaa):
 ```
 ./gradlew jar
 java -Xmx6g -jar ./build/libs/travelleri.jar runPerformanceTest dynamic 20 23 1
@@ -59,13 +61,13 @@ Jarista ajamalla ohjelma saattaa toimia myös hieman nopeammin.
 | 24 |  |           | 332.882166 | 0.000003 |
 
 
-Huomataan, että DynamicTSP on huomattavasti nopein optimipolun tuottavista algoritmeista. Alle 7 solmun verkoista NaiveTSP ja BranchTSP ovat hieman nopeampia, mutta ei niin paljoa, että sillä olisi käytännön merkitystä.
+Huomataan, että DynamicTSP on huomattavasti nopein optimipolun tuottavista algoritmeista. Alle 7 solmun verkoista NaiveTSP ja BranchTSP ovat hieman nopeampia, mutta eivät niin paljon, että erolla lienisi käytännön merkitystä missään algoritmin käyttötarkoituksessa.
 
-BranchTSP selviytyy kohtuullisessa ajassa 12 solmun verkoista, jonka jälkeen se hidastuu merkittävästi. NaiveTSP ei toimi järkevässä ajassa enää 8 solmun jälkeen.
+BranchTSP selviytyy kohtuullisessa ajassa vielä 12 solmun verkoista, jonka jälkeen se hidastuu merkittävästi. NaiveTSP ei taas toimi järkevässä ajassa enää 8 solmun jälkeen.
 
 DynamicTSP:ssä jokaisen lisäsolmun kohdalla suoritusaika noin kaksinkertaistuu. DynamicTSP toimi vielä ainakin 24 solmulla, mutta alkaa olla jo aika hidas "reaaliaikaiseen" käyttöön.
 
-ApproxTSP:lle ei ole solmujen määrällä niinkään merkitystä suoritusaikaan - toisaalta se ei myöskään palauta optimipolkua. Kuitenkin yli 20 solmun verkoissa ApproxTSP alkaa olla näistä algoritmeista ainut käyttökelpoinen algoritmi.
+ApproxTSP:lle ei ole solmujen määrällä niinkään merkitystä suoritusaikaan - toisaalta se ei myöskään palauta optimipolkua. Kuitenkin yli 20 solmun verkoissa ApproxTSP alkaa olla näistä algoritmeista ainut käyttökelpoinen algoritmi, jos tulos halutaan ns. reaaliaikaisesti.
 
 ![Suorituskyky](./suorituskyky.jpg)
 
@@ -125,22 +127,141 @@ ApproxTSP:llä ei ole suurempia muistivaatimuksia.
 Syy DynamicTSP:n muistin käytön harppaukselle yli 14 solmulla johtuu siitä, että 14 suuremmille verkoille DtspMemo:ssa varataan mahdollisimman suuri hash-taulukko, joka vielä toimii. Tällöin saadaan vähemmän törmäyksiä, mikä on hyväksi suorituskyvylle. Pienemmillä verkoilla algoritmi toimi nopeammin pienemmällä, solmumäärään suhteutetulla muistivarauksella.
 
 ## ApproxTSP:n polun pituus vs. optimipolku
-Tässä yhteydessä toteutetun nearest neighbor -approksimaatialgoritmin tuottaman polun pituuden tulisi noudattaa kaavaa  [[Rosenkrantz, Stearns, & Lewis, 1977](https://pdfs.semanticscholar.org/2081/25449f697c46d02a98eceb18b8c4622384c5.pdf)]
+ApproxTSP on toteutukseltaan [nearest neighbor](https://en.wikipedia.org/wiki/Nearest_neighbour_algorithm) -algoritmi.
+[Rosenkrantz, Stearns, Lewis (1977, 48)](https://pdfs.semanticscholar.org/2081/25449f697c46d02a98eceb18b8c4622384c5.pdf) mukaan nearest neighbor -approksimaatiolgoritmin polun pituus suhteessa optimipolkuun tulisi olla huonoimmassa tapauksessa
 
-__NN / OPT ≤ (0.5)*abs(log<sub>n</sub>+1)__,
+__NN / OPT ≤ (0.5)*(round(log<sub>2</sub>*n)+1))__,
 
-missä NN on approksimaatioalgoritmin tuottaman polun pituus, OPT optimaalisen polun pituus ja n verkon solmujen lukumäärä.
+missä NN on approksimaatioalgoritmin tuottaman polun pituus, OPT optimaalisen polun pituus, n verkon solmujen lukumäärä ja round() lähin kokonaisluku.
  
-Ajetaan testi satunnaisverkoilla sekä DynamicTSP:lle (optimipolku) sekä ApproxTSP:lle, jossa n = 10...15..
+Ajetaan testi satunnaisverkoilla ApproxTSP:lle sekä DynamicTSP:lle (optimipolku), verkon solmumäärän ollessa 10...15. Tuloksesta lasketaan suhdeluku NN / OPT. Testi toistetaan 10 eri satunnaisverkolla jokaista solmumäärää kohden. 
+
+Testin voi ajaa sovelluksen valikosta valitsemalla 5. Saadaan tulokseksi
+
+| n  | NN / OPT (keskimäärin) | NN / OPT (maksimi) | (0.5)*(round(log<sub>2</sub>*n)+1)) |
+|----|------------------------|--------------------|----------------------------|
+| 2  | 1                      | 1                  | 1.5                        |
+| 3  | 1                      | 1                  | 2                          |
+| 4  | 1                      | 1                  | 2                          |
+| 5  | 1.09                   | 1.85               | 2                          |
+| 6  | 1.21                   | 1.56               | 2.5                        |
+| 7  | 1.16                   | 1.73               | 2.5                        |
+| 8  | 1.20                   | 1.41               | 2.5                        |
+| 9  | 1.10                   | 1.30               | 2.5                        |
+| 10 | 1.34                   | 1.84               | 2.5                        |
+| 11 | 1.25                   | 1.69               | 2.5                        |
+| 12 | 1.38                   | 1.96               | 3                          |
+| 13 | 1.38                   | 2.02               | 3                          |
+| 14 | 1.40                   | 1.84               | 3                          |
+| 15 | 1.52                   | 1.76               | 3                          |
+| 16 | 1.38                   | 1.87               | 3                          |
+| 17 | 1.60                   | 2.02               | 3                          |
+| 18 | 1.54                   | 2.00               | 3                          |
+| 19 | 1.51                   | 1.80               | 3                          |
+| 20 | 1.49                   | 1.82               | 3                          |
+| 21 | 1.77                   | 2.39               | 3                          |
+| 22 | 1.43                   | 1.78               | 3                          |
+
+Huomataan, että testin aikana ApproxTSP:n tuottama polku oli pahimmassa tapauksessa 2.39 kertaa pitempi kuin optimipolku.
+Keskiarvo approksimaation polun pituudelle kaikilla verkkokoilla oli noin 1.32 kertainen optimipolkuun nähden.
+Kaikissa testitapauksissa NN / OPT oli pienempi kuin edellämainitusta kaavasta laskettu suhdeluku.
+
+## Aikavaativuudet
+### NaiveTSP
+
+Ennen työn toteutusta kirjoitetussa määrittelydokumentissa mainitaan, että "naivin" algoritmin tulisi toimia O(n!) -ajassa. Koska solmut käydään läpi n permutaatioden määrän verran on operaatioiden määrä noin n!*n. Testituloksistakin on nähtävissä, että laskentaan kului hyvin paljon aikaa. Lopputuloksen voi siis katsoa toimivan O(n!) -ajassa.
+
+### BranchTSP
+
+BranchTSP:tä ei alunperin työhön ollut tarkoitus edes toteuttaa, enkä siten ollut määritellyt mitään tavoitetta aikavaativuudelle. BranchTSP toimii jossain määrin samalla tavalla kuin NaiveTSP: molemmissa algoritmeissa luodaan kaikki reittipermutaatiot. Kuitenkin BranchTSP:ssä turhien hakujen "karsinnan" (engl. pruning) ansiosta algoritmi suorituu paljon nopeammin.
+
+Vaikuttaakin siltä, että suoritusaikaan vaikuttaa hyvin paljon se, minkälainen verkko sattu olemaan kyseessä. Suoritusajan kannalta merkkittävää on se, kuinka aikaisessa vaiheessa löydetään lyhyitä polkuja, joiden avulla karsitaan turhaa laskentaa. Esimerkiksi erilaisilla 10 solmun satunnaisverkoilla suoritusajat heittelevät aika paljon:
+
+```
+6763609
+5130998
+2592843
+4532574
+1132718
+14198121
+3887314
+862463
+1925427
+2026987
+2653997
+786648
+1625786
+3260071
+3988073
+2380648
+1955900
+1336525
+6962879
+697073
+```
+Branch-and-bound algoritmien aikavaativuutta on [haastellista arvioida](https://rjlipton.wordpress.com/2012/12/19/branch-and-bound-why-does-it-work/). Teoriassa pahimmassa tapauksessa, jossa kaikki polut löydetään pituusjärjestyksessä pisimmät polut ensin, olisi aikavaativuusluokka O(n!) (vrt. NaiveTSP). Tämä on kuitenkin epätodennäköistä ja käytännössä algoritmi toimii tätä  nopeammin.
+
+### DynamicTSP
+
+DynamicTSP:n toteutuksessa oli aikavaativuuden tavoitteena O(n²2<sup>n</sup>). Kyseinen aikavaativuus vastaa Held-Karp -algoritmin aikavaativuutta, jonka [pseudokoodista](https://www.researchgate.net/figure/Pseudocode-de-Bellman-Held-Karp_fig1_336923519) onkin katsottu mallia algoritmia koodatessa.
+
+DynamicTSP:n yksinkertaistettu pseudokoodi (mm. todellisuudessa dtspResults ja dtspPredecessors tallennetaan samaan tietorakenteeseen):
+```
+1 dtspResults = [], dtspPredecessors = []
+2 
+3 function dtsp(start, {remaining})
+4    if remaining is empty
+5       return graph[start][0]
+6
+7    if (dtspResults[start, {remaining}] != NULL)
+8       return dtspResults[start, {remaining}]
+9
+10   for k in remaining
+11      x = graph[start][k] + dtsp(k, {remaining}\{k})
+12      if (x < min) 
+13          min = x
+14          predecessor = k
+15   dtspResults[start, {remaining}] = min
+16   dtspPredecessors[start, {remaining}] = predecessor
+17
+18   return min
+19
+20 minPathLength = dtsp(0, {0...n}\{0})
+21
+22 updateShortestPath({0...n}\{0})
+```
+
+DynamicTSP (kuten Held-Karp) jakautuu kahteen vaiheeseeen:
+
+1. minPathLength laskeminen
+  - rivit 11 ja 12 toistetaan (n-1)(n-2)2<sup>n-3</sup>+(n-1) kertaa [(ks. Held-Karp, Wikipedia)](https://en.wikipedia.org/wiki/Held%E2%80%93Karp_algorithm)
+    - n * n * 2<sup>n</sup> = O(n<sup>2</sup>2<sup>n</sup>)
+
+2. updateShortestPath
+  - Haetaan optimireitti dtspPredecessorsseista
+    - käydään takaperin läpi dtspPredecessors, ks. ohjelmakoodi
+  - [((n)(n-1))/2-1](https://en.wikipedia.org/wiki/Held%E2%80%93Karp_algorithm)
+    - n*n = O(n<sup>2</sup>)
+
+Käytännössä nopeuteen vaikuttaa myös paljon taulukoinnin toteutus. Held-Karpin algoritmin yhteydessäkin on mainittu myös suuri muistivaativuus, joka tuntui tässäkin muodostuvan rajoittavaksi tekijäksi.
+
+Testien perusteella algoritmi vaikuttaisi toimivan eksponentiaalisessa ajassa ja paljon arvattavammin kuin BranchTSP.
+
+### ApproxTSP
+
+Määrittelydokumentissa oli tarkoitus toteuttaa  O(n<sup>2</sup>)approksimaatioalgoritmi, joka käyttää hyväksi jotain MST-puun algoritmia.
+
+Approksimaatioalgoritmi tuli toteutettua lähinnä intuitiolla ja minimivirittyneiden puiden algoritmeista se muistuttaa lähinnä Primin algoritmia ainoastaan etenemistavaltaan, ei välttämättä muuten. Myöhemmin selvisi, että algoritmi oli täysin samanlainen kuin wikipediassa kuvattu [Nearest neighbor algorithm](https://en.wikipedia.org/wiki/Nearest_neighbour_algorithm), jonka aikaluokaksi on ilmoitettu O(n<sup>2</sup>).
+
+Käytössä on solmut läpi käyvä rekursio, jonka sisällä yksi jäljellä olevat solmut läpi käyvä silmukka, eli operaatioita tulee noin n*n, eli aikavaativuus on O(n<sup>2</sup>). Tämä käy ilmi myös testauksessa: algoritmin voi suorittaa silmänräpäyksessä myös suurille verkoille.
+
+# Lopputulos
+
+Toteutetuista algoritmeista käyttökelpoisin optimipolun ratkaisemiseen on ehdottamasti DynamicTSP, eikä NaiveTSP ja BranchTSP algoritmien käyttöön löydy sinänsä perusteluja. 
+
+DynamicTSP alkaa kuitenkin selkeästi hidastumaan noin 20 solmua suuremmilla verkoilla - ennen kaikkea ongelmaksi muodostui muistin suuri käyttö.
+
+Jos tarvitaan nopeaa algoritmia, joka antaa jonkinlaisen arvion lyhyimmästä reitistä, voisi ApproxTSP tai jokin muu approksimaatioalgoritmi olla varteenotettava vaihtoehto.
 
 
-
-
-
-
-### Satunnaisverkot
-| Solmujen lkm | ApproxTSP:n polun pituus % optimipolusta (keskimäärin) |
-|---|---|
-
-***kesken***
 

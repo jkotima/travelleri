@@ -57,7 +57,7 @@ public class ConsoleUI {
                     TSPTests.runPerformanceTest("approx", 2, 15, 10);
                     break;
                 case 5:
-                    TSPTests.runApproxPathTest(5, 5, 1);
+                    TSPTests.runApproxPathTest(2, 22, 10);
                     break;
                 default:
                     return;
@@ -105,9 +105,15 @@ public class ConsoleUI {
 
             runBranch(graph);
         }
+
         if (args[0].equals("runPerformanceTest")) {
             TSPTests.runPerformanceTest(args[1], Integer.parseInt(args[2]), 
                         Integer.parseInt(args[3]),Integer.parseInt(args[4]));
+        }
+
+        if (args[0].equals("runApproxPathTest")) {
+            TSPTests.runApproxPathTest(Integer.parseInt(args[1]), 
+                        Integer.parseInt(args[2]),Integer.parseInt(args[3]));
         }
 
         if (args[0].equals("runFromCoordinates")) {
