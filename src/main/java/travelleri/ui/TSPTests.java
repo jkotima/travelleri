@@ -10,7 +10,7 @@ import travelleri.domain.TSP;
 /**
 * Suorituskykytesti satunnaisverkoilla
 */
-public class PerformanceTest {
+public class TSPTests {
     private static double[][] generateRandomGraph(int nodesCount) {
         Random r = new Random();
 
@@ -35,7 +35,7 @@ public class PerformanceTest {
         return randomGraph;
     }
 
-    public static void run(String algorithm, int startNodesCount,
+    public static void runPerformanceTest(String algorithm, int startNodesCount,
                                     int maxNodesCount, int repeats) {
 
         System.out.println("**Testataan " + algorithm + " " + startNodesCount + "..."

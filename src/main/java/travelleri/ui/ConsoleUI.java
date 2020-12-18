@@ -50,10 +50,10 @@ public class ConsoleUI {
                     ClipboardTool.run();
                     break;
                 case 4:
-                    PerformanceTest.run("naive", 2, 7, 10);
-                    PerformanceTest.run("branch", 2, 10, 10);
-                    PerformanceTest.run("dynamic", 2, 15, 10);
-                    PerformanceTest.run("approx", 2, 15, 10);
+                    TSPTests.runPerformanceTest("naive", 2, 7, 10);
+                    TSPTests.runPerformanceTest("branch", 2, 10, 10);
+                    TSPTests.runPerformanceTest("dynamic", 2, 15, 10);
+                    TSPTests.runPerformanceTest("approx", 2, 15, 10);
                     break;
 
                 default:
@@ -103,7 +103,7 @@ public class ConsoleUI {
             runBranch(graph);
         }
         if (args[0].equals("runPerformanceTest")) {
-            PerformanceTest.run(args[1], Integer.parseInt(args[2]), 
+            TSPTests.runPerformanceTest(args[1], Integer.parseInt(args[2]), 
                         Integer.parseInt(args[3]),Integer.parseInt(args[4]));
         }
 

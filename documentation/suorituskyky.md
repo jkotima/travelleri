@@ -5,7 +5,7 @@ Kaikki testit suoritettiin koneella, jossa prosessorina i5-8265U @ 1.60Ghz x 4, 
 ## Testaus satunnaisesti generoiduilla verkoilla 
 
 Testaukset suoritettiin satunnaisesti generoiduilla yksisuuntaisilla verkoilla, joissa kaarien paino on satunnainen liukuluku välillä 0-100. 
-Algoritmit ajettiin useaan kertaa jokaista verkon kokoa kohti: ennen algoritmin ajoa generoitiin aina uusi satunnainen verkko. Ajojen lukumäärä riippui suoritusajasta: pienille verkoille algoritmi ajettiin 10 kertaa. Jos suoritusaika oli yli viisi sekuntia, ajettiin 5 kertaa, jos yli 30 sekuntia, vain kerran. Verkkojen suoritusajoista otettiin keskiarvo.
+Algoritmit ajettiin useaan kertaa jokaista verkon kokoa kohti, niin että ennen algoritmin ajoa generoitiin aina uusi satunnainen verkko. Ajojen lukumäärä riippui suoritusajasta: pienille verkoille algoritmi ajettiin 10 kertaa. Jos suoritusaika oli yli viisi sekuntia, ajettiin 5 kertaa, jos yli 30 sekuntia, vain kerran. Verkkojen suoritusajoista otettiin keskiarvo.
 
 Satunnaisen verkon suorituskykytestit ajetaan komentoriviltä algoritmille seuraavasti:
 
@@ -59,11 +59,11 @@ Jarista ajamalla ohjelma saattaa toimia myös hieman nopeammin.
 | 24 |  |           | 332.882166 | 0.000003 |
 
 
-Huomataan, että DynamicTSP on huomattavasti nopein optimipolun tuottavista algoritmeista. Alle 7 solmun verkoista kevyempää tietorakennetta käyttävät algoritmin ovat hieman nopeampia, mutta ei niin paljoa, että sillä olisi käytännön merkitystä.
+Huomataan, että DynamicTSP on huomattavasti nopein optimipolun tuottavista algoritmeista. Alle 7 solmun verkoista NaiveTSP ja BranchTSP ovat hieman nopeampia, mutta ei niin paljoa, että sillä olisi käytännön merkitystä.
 
-BranchTSP selviytyy kohtuullisessa ajassa 12 solmun verkoista, jonka jälkeen se hidastuu merkittävästi. Naive ei toimi järkevässä ajassa enää 8 solmun jälkeen.
+BranchTSP selviytyy kohtuullisessa ajassa 12 solmun verkoista, jonka jälkeen se hidastuu merkittävästi. NaiveTSP ei toimi järkevässä ajassa enää 8 solmun jälkeen.
 
-DynamicTSP:ssä jokaisen lisäsolmun kohdalla suoritusaika noin kaksinkertaistuu. DynamicTSP toimi vielä ainakin 24 solmulla, mutta alkaa olla jo aika hidas mihinkään käyttötarkoitukseen.
+DynamicTSP:ssä jokaisen lisäsolmun kohdalla suoritusaika noin kaksinkertaistuu. DynamicTSP toimi vielä ainakin 24 solmulla, mutta alkaa olla jo aika hidas "reaaliaikaiseen" käyttöön.
 
 ApproxTSP:lle ei ole solmujen määrällä niinkään merkitystä suoritusaikaan - toisaalta se ei myöskään palauta optimipolkua. Kuitenkin yli 20 solmun verkoissa ApproxTSP alkaa olla näistä algoritmeista ainut käyttökelpoinen algoritmi.
 
@@ -71,7 +71,7 @@ ApproxTSP:lle ei ole solmujen määrällä niinkään merkitystä suoritusaikaan
 
 ## Muistin käyttö
 
-Muistin käytön mittaaminen käytännössä suorituksen aikana osoittautui ongelmalliseksi johtuen Javan roskienkerääjän arvaamattomasta toiminnasta.
+Muistin käytön mittaaminen suorituksen aikana osoittautui jokseenkin ongelmalliseksi johtuen Javan roskienkerääjän arvaamattomasta toiminnasta.
 Algoritmien muistinkäytöstä sai kuitenkin jonkinlaisen kuvan tarkkalemalla käyttöjärjestelmätasolla, kuinka paljon Java-prosessi vei enintään käyttömuistia suorituksen aikana.
 Esimerkiksi testikoneella, jossa on Ubuntu 18.04, sai prosessin muistin käytön maksimin näkyviin (tässä suoritetaan BranchTSP 10 solmun verkolla)
 
@@ -112,9 +112,9 @@ Tässä käytetyt testit voi ajaa myös skriptistä
 | 23           |          |           | 6661624    | 46012     |
 | 24           |          |           | 12530180   | 46728     |
 
-Kuten arvata saattaa, vie DynamicTSP järkyttävästi muistia taulukoinnin käytön vuoksi isoilla verkoilla. Yllättäen DynamicTPS:n muistivaativuus näyttäisi olevan samaa luokkaa muiden algoritmien kanssa myös pienemmillä verkoilla. Kuutta solmua suuremmilla verkoilla NaiveTSP ja BranchTSP jäävät taakse nopeutensa lisäksi muistin käytössä.
+DynamicTSP vie paljon muistia taulukoinnin käytön vuoksi varsinkin isoilla verkoilla. Kuitenkin DynamicTSP:n muistivaativuus näyttäisi olevan samaa luokkaa muiden algoritmien kanssa myös pienemmillä verkoilla. Kuutta solmua suuremmilla verkoilla NaiveTSP ja BranchTSP jäävät taakse nopeutensa lisäksi muistin käytössä.
 
-DynamicTSP:llä 24 solmun kohdalla tuli jo testikoneen käyttömuistin (16gb) rajat vastaan. Muistin sivutuksesta johtuvasta hidastumisesta ja suoritusajan kasvusta johtuen ei tällä toteutuksella ole enää mielekästä ratkoa tätä suurempia verkkoja, ainakaan tällä koneella.
+DynamicTSP:llä 24 solmun kohdalla tuli jo testikoneen käyttömuistin (16gb) rajat vastaan. Muistin sivutuksesta johtuvasta hidastumisesta ja tästä seuraavasta suoritusajan kasvusta johtuen voidaan tätä alkaa pitämään rajana verkon koolle tällä toteutuksella.
 
 ApproxTSP:llä ei ole suurempia muistivaatimuksia.
 
@@ -122,9 +122,21 @@ ApproxTSP:llä ei ole suurempia muistivaatimuksia.
 
 ![Muistin käyttö](./muisti.jpg)
 
-Syy DynamicTSP:n muistin käytön harppaukselle yli 14 solmulla johtuu siitä, että 14 suuremmille verkoille DtspMemo:ssa varataan mahdollisimman suuri hash-taulukko, joka vielä toimii. Tällöin tuli vähemmän törmäyksiä, mikä on hyväksi suorituskyvylle. Pienemmillä verkoilla algoritmi toimi nopeammin pienemmällä, solmumäärään suhteutetulla muistivarauksella.
+Syy DynamicTSP:n muistin käytön harppaukselle yli 14 solmulla johtuu siitä, että 14 suuremmille verkoille DtspMemo:ssa varataan mahdollisimman suuri hash-taulukko, joka vielä toimii. Tällöin saadaan vähemmän törmäyksiä, mikä on hyväksi suorituskyvylle. Pienemmillä verkoilla algoritmi toimi nopeammin pienemmällä, solmumäärään suhteutetulla muistivarauksella.
 
 ## ApproxTSP:n polun pituus vs. optimipolku
+Tässä yhteydessä toteutetun nearest neighbor -approksimaatialgoritmin tuottaman polun pituuden tulisi noudattaa kaavaa  [[Rosenkrantz, Stearns, & Lewis, 1977](https://pdfs.semanticscholar.org/2081/25449f697c46d02a98eceb18b8c4622384c5.pdf)]
+
+__NN / OPT ≤ (0.5)*abs(log<sub>n</sub>+1)__,
+
+missä NN on approksimaatioalgoritmin tuottaman polun pituus, OPT optimaalisen polun pituus ja n verkon solmujen lukumäärä.
+ 
+Ajetaan testi satunnaisverkoilla sekä DynamicTSP:lle (optimipolku) sekä ApproxTSP:lle, jossa n = 10...15..
+
+
+
+
+
 
 ### Satunnaisverkot
 | Solmujen lkm | ApproxTSP:n polun pituus % optimipolusta (keskimäärin) |
