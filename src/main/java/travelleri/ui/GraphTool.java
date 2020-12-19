@@ -52,7 +52,7 @@ public class GraphTool {
         runTSP(tsp);
     }
 
-    public static void creater(Scanner scan) throws IOException {
+    public static void creator(Scanner scan) throws IOException {
         System.out.print("Solmujen lukumäärä? ");
         while (!scan.hasNextInt()) {
             scan.next();    

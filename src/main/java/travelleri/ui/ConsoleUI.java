@@ -41,7 +41,7 @@ public class ConsoleUI {
 
             switch (selection) {
                 case 1:
-                    GraphTool.creater(scan);
+                    GraphTool.creator(scan);
                     break;
                 case 2:
                     GraphTool.opener(scan);
