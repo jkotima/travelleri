@@ -1,5 +1,6 @@
 # Määrittelydokumentti
 
+*(Tämä dokumentti on tehty projektin alkuvaiheessa, eikä sitä ole sen jälkeen päivitetty. Muut dokumentit ovat ajan tasalla)*
 
 Tarkoitus on toteuttaa kauppamatkustajan ongelmaan (travelling salesperson problem, TSP)
 ratkaisuja kolmella eri algoritmilla sekä toteuttaa näille suorituskykyvertailua erikokoisilla verkoilla. 
