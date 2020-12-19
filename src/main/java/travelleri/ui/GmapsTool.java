@@ -9,7 +9,7 @@ import travelleri.domain.TSP;
 import travelleri.io.OsrmFetch;
 
 /**
-* Google Maps -koordinaattien lukemiseen leikepöydältä ja algoritmin ajamiseksi Google Maps-linkiksi.
+* Google Maps -koordinaattien lukemiseen leikepöydältä ja algoritmin ajamiseksi GoogleMaps-linkiksi.
 */
 public class GmapsTool {
     private static String readClipboard() throws Exception {
