@@ -59,8 +59,7 @@ public class GraphTool {
         } 
         int nodesCount = scan.nextInt();
 
-        System.out.print("1. Syötä painot käsin 2. Generoi satunnaiset painot"
-                        + " 3. Generoi säännöllinen ruudukko ");
+        System.out.print("1. Syötä painot käsin 2. Generoi satunnaiset painot");
         
         while (!scan.hasNextInt()) {
             scan.next();
@@ -93,16 +92,6 @@ public class GraphTool {
                         break;
                     case 2:
                         newGraph[x][y] = 100 * r.nextDouble();
-                        break;
-                    case 3:
-                        int leveys = (int) Math.sqrt(nodesCount);
-                        int x1 = x / leveys;
-                        int y1 = x - (x1 * leveys);
-                        int x2 = y / leveys;
-                        int y2 = y - (x2 * leveys);
-                        
-                        newGraph[x][y] = Math.abs(x1 - x2) + Math.abs(y1 - y2);
-                        
                         break;
                     default:
                         return;
