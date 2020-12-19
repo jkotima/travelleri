@@ -1,4 +1,14 @@
 # Toteutus
+## Rakenne
+**/domain** sisältää projektin oleellisimman sisällön eli algoritmien toteutukset, jotka toteuttavat TSP-rajapinnan. Sisältää lisäksi em. käyttämät tietorakenteet. Näille on myös toteutettu JUnit-yksikkötestit (/main/test/).
+
+**/io** sisältää tiedostoihin ja OSRM-rajapinnan käyttöön liittyvän toiminnallisuuden.
+
+**/ui** sisältää käyttöliittymään liittyvän toiminnallisuuden.
+
+## TSP
+Kaikkien algoritmien toteuttama rajapinta.
+Algoritmeista luodaan olio käyttäen verkkoa konstruktoriparametrina ja se ajetaan metodilla run. Tulokset saadaan gettereitä käyttämällä.
 
 ## NaiveTSP
 
