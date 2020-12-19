@@ -13,7 +13,7 @@ public class OsrmFetch {
         private double[][] distances;
     }
 
-    public static double[][] fetchFromOsmr(String[][] coordinates) throws IOException {
+    public static double[][] getGraph(String[][] coordinates) throws IOException {
         String allCoords = "";
         boolean first = true;
         for (String[] c : coordinates) {

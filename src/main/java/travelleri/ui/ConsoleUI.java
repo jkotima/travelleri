@@ -81,19 +81,19 @@ public class ConsoleUI {
 
                 switch (args[2]) {
                     case "naive":
-                        tsp = new NaiveTSP(OsrmFetch.fetchFromOsmr(coords));
+                        tsp = new NaiveTSP(OsrmFetch.getGraph(coords));
                         break;
                     case "dynamic":
-                        tsp = new DynamicTSP(OsrmFetch.fetchFromOsmr(coords));
+                        tsp = new DynamicTSP(OsrmFetch.getGraph(coords));
                         break;
                     case "approx":
-                        tsp = new ApproxTSP(OsrmFetch.fetchFromOsmr(coords));
+                        tsp = new ApproxTSP(OsrmFetch.getGraph(coords));
                         break;
                     case "branch":
-                        tsp = new BranchTSP(OsrmFetch.fetchFromOsmr(coords));
+                        tsp = new BranchTSP(OsrmFetch.getGraph(coords));
                         break;
                     default:
-                        tsp = new DynamicTSP(OsrmFetch.fetchFromOsmr(coords));
+                        tsp = new DynamicTSP(OsrmFetch.getGraph(coords));
                         break;
                 }
 

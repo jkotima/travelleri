@@ -57,7 +57,7 @@ Koordinaattitiedostoissa koordinaatit ovat samaa muotoa kuin Google Mapsista kop
 ./gradlew run --args "runFromCoordinates [tiedosto] [naive/branch/dynamic/approx]" --console=plain
 
 Esim.
-./gradlew run --args "runFromCoordinates ./examples/coords.txt naive" --console=plain
+./gradlew run --args "runFromCoordinates ./examples/coords.txt approx" --console=plain
 
 Tai
 
