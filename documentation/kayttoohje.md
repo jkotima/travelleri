@@ -1,5 +1,6 @@
 # Käyttöohje
-*(Nämä ohjeet on tehty Linuxille)*
+Nämä ohjeet on tehty lähtökohtaisesti Linuxille, mutta gradle toimii kyllä muillakin käyttöjärjestelmillä.
+Esim. Windowsissa voi korvata ./gradlew -> gradlew. Sovelluksen toiminnot voi ajaa myös jar-tiedostosta (joko githubin release tai gradlella buildattu jar, ks. kohta 'Buildaaminen').
 
 ## Tekstipohjaisen käyttöliittymän ajaminen 
 ```
