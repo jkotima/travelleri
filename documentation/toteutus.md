@@ -4,7 +4,7 @@
 
 Algoritmin naivissa toteutuksessa generoidaan aluksi kaikki mahdolliset etenimisjärjestykset solmuissa niin, että polku alkaa solmusta 0 ja kulkee kaikkien solmujen kautta. Tämän jälkeen näiden permutaatioiden mukaiset polut käydään läpi, laskien samalla ko. polusta syntyvä matka. Lyhin löydetty polku ja sen permutaatio tallennetaan oliomuuttujiin.
 
-Kun n on solmujen lukuäärä, permutaatioden generointi vie aikaa O(n!) (permutaatioiden lukumäärä) ja reittien läpikäyminen O(n!*n). Aikavaativuus on siis luokkaa O(n!), joten algoritmi on todella hidas.
+Aikavaativuus on luokkaa O(n!), joten algoritmi on todella hidas.
 
 ## DynamicTSP
 
@@ -43,7 +43,7 @@ Toteutus on samankaltainen, kuin [Held-Karpin algoritmissa](https://en.wikipedia
 
 Tämä tietorakenne on toteutettu DynamicTSP:n dtsp-metodin laskemien tulosten tallentamiseen ja niiden hakemiseen. Tulosten lisäksi jokaiseen start- ja remaining -pariin merkataan edeltävä solmu.
 
-Tallentaessa dtsp-tulosta start- ja remaining -parille lasketaan hash-arvo, jonka perusteella tulostaulukon indeksi on haettavissa nopeasti. Hash-taulukon ja tulostaulukon koko lasketaan konstruktoriargumentissa annetun solmumäärän perusteella.
+Tallentaessa dtsp-tulosta start- ja remaining -parille lasketaan hash-arvo, jonka perusteella tulostaulukon indeksi on haettavissa nopeasti. Hash-taulukon ja tulostaulukon koko lasketaan konstruktoriargumentissa annetun solmumäärän perusteella. Isoilla verkoilla käytetään suurinta mahdollista taulukon kokoa, jossa hash-arvon laskennassa ei vielä esiintynyt ongelmia (ylivuoto).
 
 Törmäyksien hallinta on toteutettu linkittämällä, eli jokaisessa tulos-oliossa on osoitin (next) seuraavaan saman hash-arvon saaneeseen alkioon.
 
@@ -52,7 +52,7 @@ Törmäyksien hallinta on toteutettu linkittämällä, eli jokaisessa tulos-olio
 
 Solmuissa eteneminen on toteutettu rekursiivisesti. Rekursio etenee aina lähimpään vierailemattomaan solmuun pitämällä samalla kirjaa kokonaismatkasta. Kun kaikki solmut on käyty läpi, tallennetaan tulos shortestPath-muuttujaan.
 
-Reitti tallennetaan muistiin käyttämällä apuna *NodeList*-tietorakennetta.
+Reitti tallennetaan muistiin käyttämällä apuna *NodeList*-tietorakennetta, joka mm. toteuttaa add-metodin.
 
 Laskettu polku ei siis missään nimessa kaikissa tapauksissa ole optimipolku, mutta algoritmi on nopea: jos n on solmujen lukumäärä, aikavaativuus on vain O(n²) (käytössä solmut läpi käyvä rekursio, jonka sisällä yksi jäljellä olevat solmut läpi käyvä silmukka).
 
@@ -62,7 +62,7 @@ Algoritmi toimii samalla tavalla kuin [nearest neighbor algorithm.](https://en.w
 
 Algoritmi perustuu peruuttavaan hakuun ja sitä nopeuttavaan branch-and-bound -tekniikkan.
 
-Algoritmi käy järjestelmällisesti läpi kaikki yhdistelmät (O(n!)). Kuitenkin, jos sen hetkisen läpikäytävän polun pituus on kasvanut yli lyhyimmän siihen mennessä löydetyn polun, lopetetaan kyseisen haaran läpikäynti. Tämä nopeuttaa laskentaa huomattavasti.
+Algoritmi käy järjestelmällisesti läpi kaikki yhdistelmät (O(n!)). Kuteinkin, sen hetkisen läpikäytävän polun pituus on kasvanut yli lyhyimmän siihen mennessä löydetyn polun, lopetetaan kyseisen haaran läpikäynti. Tämä (branch-and-bound) nopeuttaa laskentaa huomattavasti.
 
 ## NodeList
 
@@ -81,8 +81,12 @@ Käyttöliittymään on toteutettu:
     * algoritmien suoritusajan mittaus
     * lyhimmän polun, polun pituuden ja suoritusajan tulostus
 * osoitekoordinaattejen perusteella suoritettava reitin laskenta
+  * koordinaattien perusteella haetaan ajomatkojen etäisyysmatriisi ulkoisesta OSRM-rajapinnasta
+  * etäisyysmatriisille ajetaan dynamicTSP ja tuloksesta ja koordinaateista generoidaan Google Maps-reittilinkki.
 * suorituskykytesti satunnaisverkoilla
 * testi ApproxTSP-algoritmin polun pituudelle suhteessa optimipolkuun
+
+Käyttöliittymä on selkeyttä tavoitellen palasteltu useampaan tiedostoon /ui alle.
 
 ## I/O
 
