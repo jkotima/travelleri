@@ -29,7 +29,7 @@ dependencies {
 
     // gson
     implementation 'com.google.code.gson:gson:2.8.6'
-
+    
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 
@@ -42,6 +42,10 @@ application {
 jar {
     manifest {
         attributes 'Main-Class': 'travelleri.Main'
+    }
+    
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
@@ -73,4 +77,11 @@ sourceSets {
 run {
     standardInput = System.in
     standardOutput = System.out
+}
+
+// ääkköset toimimaan
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }

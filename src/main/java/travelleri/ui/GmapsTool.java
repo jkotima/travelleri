@@ -33,6 +33,7 @@ public class GmapsTool {
                 clipboardtxt = readClipboard();
                 i++;
             }
+            Thread.sleep(100);
         }
         coords = Arrays.copyOf(coords, i);
         runToGmapsLink(coords, new DynamicTSP(OsrmFetch.getGraph(coords)));
