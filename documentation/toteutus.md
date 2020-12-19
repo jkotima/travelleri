@@ -106,7 +106,7 @@ OsmrFetch hakee etäisyysmatriisin koordinaattien perusteella [OSRM](http://proj
 
 ## Puutteet ja parannusehdotukset
 
-Työssä on keskitytty lähinnä algoritmien toteuttamiseen, joten esimerkiksi käyttöliittymälle ei ole tehty testejä eikä siihen ole panostettu hirveästi.
-Algoritmeista olisi ollut vielä mielenkiintoista kokeilla BranchTSP:n ja ApproxTSP:n yhdistelmään, jossa approx-polkua olisi käyttänyt branch-and-bound alkuarvona.
+Työssä on keskitytty lähinnä algoritmien toteuttamiseen, joten esimerkiksi käyttöliittymälle ei ole tehty testejä eikä siihen ole muutenkaan panostettu hirveästi.
+Algoritmeista olisi ollut vielä mielenkiintoista kokeilla BranchTSP:n ja ApproxTSP:n yhdistelmää, jossa approx-polun pituutta olisi käytetty branch-and-bound alkuarvona.
 
 
