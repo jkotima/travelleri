@@ -1,5 +1,9 @@
 # travelleri
-Tietorakenteet ja algoritmit, harjoitustyö
+Ratkaisualgoritmeja [kauppamatkustajan ongelmaan](https://en.wikipedia.org/wiki/Travelling_salesman_problem).
+
+Liittyy Helsingin Yliopiston kurssiin *Aineeopintojen harjoitustyö: Tietorakenteet ja algoritmit*.
+
+## Dokumentaatio
 
 [Käyttöohje](../master/documentation/kayttoohje.md)
 
@@ -8,6 +12,8 @@ Tietorakenteet ja algoritmit, harjoitustyö
 [Toteutus](../master/documentation/toteutus.md)
 
 [Suorituskykytestaus](../master/documentation/suorituskyky.md)
+
+## Viikkoraportit
 
 [Viikkoraportti 1](../master/documentation/viikkoraportti1.md)
 
@@ -20,3 +26,5 @@ Tietorakenteet ja algoritmit, harjoitustyö
 [Viikkoraportti 5](../master/documentation/viikkoraportti5.md)
 
 [Viikkoraportti 6](../master/documentation/viikkoraportti6.md)
+
+[Viikkoraportti 7](../master/documentation/viikkoraportti7.md)
