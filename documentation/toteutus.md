@@ -103,3 +103,10 @@ Käyttöliittymä on selkeyttä tavoitellen palasteltu useampaan tiedostoon /ui 
 UI:n tiedoston tallennus- ja avausominaisuutta varten on toteutettu yksinkertainen luokka, jolla voi tallentaa kaksiulotteisen liukulukutaulukon csv-tyyliseksi tiedostoksi ja avata csv-tiedoston kaksiulotteiseksi taulukoksi.
 
 OsmrFetch hakee etäisyysmatriisin koordinaattien perusteella [OSRM](http://project-osrm.org/):n avoimesta rajapinnasta ja palauttaa sen kaksiulotteisena liukulukutaulukkona.
+
+## Puutteet ja parannusehdotukset
+
+Työssä on keskitytty lähinnä algoritmien toteuttamiseen, joten esimerkiksi käyttöliittymälle ei ole tehty testejä eikä siihen ole panostettu hirveästi.
+Algoritmeista olisi ollut vielä mielenkiintoista kokeilla BranchTSP:n ja ApproxTSP:n yhdistelmään, jossa approx-polkua olisi käyttänyt branch-and-bound alkuarvona.
+
+
