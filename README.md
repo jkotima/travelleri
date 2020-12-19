@@ -28,3 +28,5 @@ Liittyy Helsingin Yliopiston kurssiin *Aineeopintojen harjoitustyö: Tietorakent
 [Viikkoraportti 6](../master/documentation/viikkoraportti6.md)
 
 [Viikkoraportti 7](../master/documentation/viikkoraportti7.md)
+
+[Viikkoraportti 8](../master/documentation/viikkoraportti8.md)
